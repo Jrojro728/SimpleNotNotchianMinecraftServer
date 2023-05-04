@@ -44,7 +44,7 @@ int InitWinsock2(SOCKET &ClientSocket)
 		freeaddrinfo(Result);
 		closesocket(ListenSocket);
 		WSACleanup();
-		return 1;
+		exit(1);
 	}
 	freeaddrinfo(Result);
 
@@ -52,7 +52,7 @@ int InitWinsock2(SOCKET &ClientSocket)
 		printf("监听错误: %ld\n", WSAGetLastError());
 		closesocket(ListenSocket);
 		WSACleanup();
-		return 1;
+		exit(1);
 	}
 
 	ClientSocket = INVALID_SOCKET;
@@ -61,7 +61,7 @@ int InitWinsock2(SOCKET &ClientSocket)
 		printf("接受连接错误: %d\n", WSAGetLastError());
 		closesocket(ListenSocket);
 		WSACleanup();
-		return 1;
+		exit(1);
 	}
 
 	return 0;

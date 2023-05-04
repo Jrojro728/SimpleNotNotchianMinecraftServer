@@ -10,4 +10,10 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
+
+/// <summary> 
+/// 初始化Winsock2
+/// </summary>
+/// <param name="ClientSocket">要获取的客户端接口</param>
+/// <returns>状态码</returns>
 int InitWinsock2(SOCKET& ClientSocket);
