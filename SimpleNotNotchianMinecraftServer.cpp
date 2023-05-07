@@ -3,14 +3,16 @@
 
 #include <iostream>
 #include "WinSock2Usage.h"
+#include "Packet.h"
+
+char Data[MAX_SIZEOF_PACKET];
 
 int main()
-{ 
-    SOCKET ClientSocket;
-    InitWinsock2(ClientSocket);
+{
+	SOCKET ClientSocket;
+	InitWinsock2(ClientSocket);
+	memset(Data, 0, sizeof(Data));
 
-    char Data[512] = { 0 };
-    memset(Data, 0, sizeof(Data));
-
-    recv(ClientSocket, Data, 512, 0);
+	recv(ClientSocket, Data, MAX_SIZEOF_PACKET, 0);
+	Packet HandShake(Data);
 }

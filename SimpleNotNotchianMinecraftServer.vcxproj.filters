@@ -21,9 +21,21 @@
     <ClCompile Include="WinSock2Usage.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Var.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Packet.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WinSock2Usage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Var.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

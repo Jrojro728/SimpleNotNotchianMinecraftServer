@@ -3,7 +3,7 @@
 #pragma comment(lib, "Ws2_32.lib")
 #define DEFAULT_PORT "25565"
 
-int InitWinsock2(SOCKET &ClientSocket) 
+int InitWinsock2(SOCKET& ClientSocket)
 {
 	WSADATA WsaData;
 	int iResult;
