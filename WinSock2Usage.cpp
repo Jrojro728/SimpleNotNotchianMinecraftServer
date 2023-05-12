@@ -1,4 +1,4 @@
-#include "WinSock2Usage.h"
+ï»¿#include "WinSock2Usage.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 #define DEFAULT_PORT "25565"
@@ -10,7 +10,7 @@ int InitWinsock2(SOCKET& ClientSocket)
 
 	iResult = WSAStartup(MAKEWORD(2, 2), &WsaData);
 	if (iResult != 0) {
-		printf("ÔËĞĞÊ±³öÏÖ´íÎó: %d\n", iResult);
+		printf("è¿è¡Œæ—¶å‡ºç°é”™è¯¯: %d\n", iResult);
 		exit(1);
 	}
 
@@ -24,7 +24,7 @@ int InitWinsock2(SOCKET& ClientSocket)
 
 	iResult = getaddrinfo(NULL, DEFAULT_PORT, &Hints, &Result);
 	if (iResult != 0) {
-		printf("ÔËĞĞÊ±³öÏÖ´íÎó: %d\n", iResult);
+		printf("è¿è¡Œæ—¶å‡ºç°é”™è¯¯: %d\n", iResult);
 		WSACleanup();
 		exit(1);
 	}
@@ -32,7 +32,7 @@ int InitWinsock2(SOCKET& ClientSocket)
 	SOCKET ListenSocket = INVALID_SOCKET;
 	ListenSocket = socket(Result->ai_family, Result->ai_socktype, Result->ai_protocol);
 	if (ListenSocket == INVALID_SOCKET) {
-		printf("Ö´ĞĞsocket()Ê±´íÎó: %ld\n", WSAGetLastError());
+		printf("æ‰§è¡Œsocket()æ—¶é”™è¯¯: %ld\n", WSAGetLastError());
 		freeaddrinfo(Result);
 		WSACleanup();
 		exit(1);
@@ -40,7 +40,7 @@ int InitWinsock2(SOCKET& ClientSocket)
 
 	iResult = bind(ListenSocket, Result->ai_addr, (int)Result->ai_addrlen);
 	if (iResult == SOCKET_ERROR) {
-		printf("°ó¶¨´íÎó: %d\n", WSAGetLastError());
+		printf("ç»‘å®šé”™è¯¯: %d\n", WSAGetLastError());
 		freeaddrinfo(Result);
 		closesocket(ListenSocket);
 		WSACleanup();
@@ -49,7 +49,7 @@ int InitWinsock2(SOCKET& ClientSocket)
 	freeaddrinfo(Result);
 
 	if (listen(ListenSocket, SOMAXCONN) == SOCKET_ERROR) {
-		printf("¼àÌı´íÎó: %ld\n", WSAGetLastError());
+		printf("ç›‘å¬é”™è¯¯: %ld\n", WSAGetLastError());
 		closesocket(ListenSocket);
 		WSACleanup();
 		exit(1);
@@ -58,7 +58,7 @@ int InitWinsock2(SOCKET& ClientSocket)
 	ClientSocket = INVALID_SOCKET;
 	ClientSocket = accept(ListenSocket, NULL, NULL);
 	if (ClientSocket == INVALID_SOCKET) {
-		printf("½ÓÊÜÁ¬½Ó´íÎó: %d\n", WSAGetLastError());
+		printf("æ¥å—è¿æ¥é”™è¯¯: %d\n", WSAGetLastError());
 		closesocket(ListenSocket);
 		WSACleanup();
 		exit(1);

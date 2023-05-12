@@ -1,28 +1,28 @@
-#pragma once
+ï»¿#pragma once
 #include <cstdint>
 
 /// <summary>
-/// ±àÂëVarInt
+/// ç¼–ç VarInt
 /// </summary>
-/// <param name="OriginalNumber">Ô­ÊıÖµ</param>
-/// <returns>VarInt±äÁ¿</returns>
+/// <param name="OriginalNumber">åŸæ•°å€¼</param>
+/// <returns>VarIntå˜é‡</returns>
 int8_t* EncodeVarInt(int OriginalNumber, int8_t* buf);
 /// <summary>
-/// ½âÂëVarInt
+/// è§£ç VarInt
 /// </summary>
-/// <param name="VarLong">Òª½âÂëµÄVarInt±äÁ¿</param>
-/// <returns>½âÂëºóµÄÊıÖµ</returns>
-int DecodeVarInt(int8_t* VarInt);
+/// <param name="VarLong">è¦è§£ç çš„VarIntå˜é‡</param>
+/// <returns>è§£ç åçš„æ•°å€¼</returns>
+int DecodeVarInt(int8_t* VarInt, int &Size);
 
 /// <summary>
-/// ±àÂëVarLong
+/// ç¼–ç VarLong
 /// </summary>
-/// <param name="OriginalNumber">Ô­ÊıÖµ</param>
-/// <returns>VarLong±äÁ¿</returns>
+/// <param name="OriginalNumber">åŸæ•°å€¼</param>
+/// <returns>VarLongå˜é‡</returns>
 int8_t* EncodeVarLong(long long OriginalNumber, int8_t* buf);
 /// <summary>
-/// ½âÂëVarLong
+/// è§£ç VarLong
 /// </summary>
-/// <param name="VarLong">Òª½âÂëµÄVarLong±äÁ¿</param>
-/// <returns>½âÂëºóµÄÊıÖµ</returns>
-long long DecodeVarLong(int8_t* VarLong);
+/// <param name="VarLong">è¦è§£ç çš„VarLongå˜é‡</param>
+/// <returns>è§£ç åçš„æ•°å€¼</returns>
+long long DecodeVarLong(int8_t* VarLong, int &Size);

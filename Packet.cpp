@@ -1,32 +1,50 @@
 #include "Packet.h"
 
-Packet::Packet(char* DataBase)
+Packet::Packet(char* DataBase, int& offset)
 {
-	char* BaseBuf = new char[MAX_SIZEOF_PACKET];
-	*BaseBuf = *DataBase;
+	int temp = 0;
+	Size = DecodeVarInt((int8_t*)DataBase, offset);
+	ID = DecodeVarInt((int8_t*)DataBase + offset, temp);
+	offset += temp;
 
-	memset(DataBase + 1, 0, MAX_SIZEOF_PACKET - 1);
-	Size = DecodeVarInt((int8_t*)DataBase);
-
-	DataBase = BaseBuf;
-	memset(DataBase, 0, 1);
-	memset(DataBase + 2, 0, MAX_SIZEOF_PACKET - 2);
-	std::string s(DataBase, MAX_SIZEOF_PACKET);
-	s = s.substr(1);
-	ID = DecodeVarInt((int8_t *)strtok(const_cast<char*>(s.c_str()), "\0"));
+	Data = (int8_t*)DataBase;
 }
 
-int Packet::GetVarInt(int Start, int End)
+int Packet::GetVarInt(int Start, int& Size)
 {
-	return 0;
+	int8_t* temp = new int8_t[4];
+	for(int i = 0; i < 4; i++)
+	{
+		temp[i] = Data[Start + i];
+	}
+	return DecodeVarInt(temp, Size);
 }
 
-long long Packet::GetVarLong(int Start, int End)
+long long Packet::GetVarLong(int Start, int& Size)
 {
-	return 0;
+	int8_t* temp = new int8_t[8];
+	for (int i = 0; i < 8; i++)
+	{
+		temp[i] = Data[Start + i];
+	}
+	return DecodeVarLong(temp, Size);
 }
 
-std::string Packet::GetString(int Start, int End)
+std::string Packet::GetString(int Start, int &Size)
 {
-	return std::string();
+	int8_t* VarInt = new int8_t[Size];
+	for (int i = 0; i < Size; i++)
+	{
+		VarInt[i] = Data[i + Start];
+	}
+
+	int offset = 0;
+	Size = DecodeVarInt(VarInt, offset);
+	char* temp = new char[Size];
+	for (int i = 0; i < Size; i++)
+	{
+		temp[i] = Data[i + Start + offset];
+	}
+	
+	return std::string(temp, Size);
 }

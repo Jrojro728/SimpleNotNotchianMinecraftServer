@@ -13,6 +13,11 @@ int main()
 	InitWinsock2(ClientSocket);
 	memset(Data, 0, sizeof(Data));
 
+	int offset = 0, temp = 0;
 	recv(ClientSocket, Data, MAX_SIZEOF_PACKET, 0);
-	Packet HandShake(Data);
+	Packet HandShake(Data, offset);
+	HandShake.GetVarInt(offset, offset);
+	HandShake.GetString(offset + 2, offset);
+
+	return 0;
 }

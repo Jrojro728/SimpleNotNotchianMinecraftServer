@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -12,8 +12,8 @@
 
 
 /// <summary> 
-/// ��ʼ��Winsock2
+/// 初始化Winsock2
 /// </summary>
-/// <param name="ClientSocket">Ҫ��ȡ�Ŀͻ��˽ӿ�</param>
-/// <returns>״̬��</returns>
+/// <param name="ClientSocket">要获取的客户端接口</param>
+/// <returns>状态码</returns>
 int InitWinsock2(SOCKET& ClientSocket);

@@ -1,6 +1,6 @@
-#include "Var.h"
+ï»¿#include "Var.h"
 
-//ÊµÏÖÀ´×Ô https://zhuanlan.zhihu.com/p/84250836
+//å®ç°æ¥è‡ª https://zhuanlan.zhihu.com/p/84250836
 
 int8_t* EncodeVarInt(int OriginalNumber, int8_t* buf)
 {
@@ -17,10 +17,9 @@ int8_t* EncodeVarInt(int OriginalNumber, int8_t* buf)
 	return buf;
 }
 
-int DecodeVarInt(int8_t* VarInt)
+int DecodeVarInt(int8_t* VarInt, int &Size)
 {
-	int n{};
-	int x{};
+	int x{}, n = 0;
 	for (unsigned shift = 0; shift < 32; shift += 7)
 	{
 		if (n >= sizeof(VarInt))
@@ -31,7 +30,10 @@ int DecodeVarInt(int8_t* VarInt)
 
 		x |= (b & 0x7f) << shift;
 		if ((b & 0x80) == 0)
+		{
+			Size = n;
 			return x;
+		}
 	}
 	throw "VarInt is to big";
 }
@@ -51,11 +53,10 @@ int8_t* EncodeVarLong(long long OriginalNumber, int8_t* buf)
 	return buf;
 }
 
-long long DecodeVarLong(int8_t* VarLong)
+long long DecodeVarLong(int8_t* VarLong, int& Size)
 {
-	int n{};
-	int64_t x{};
-	for (unsigned shift = 0; shift < 64; shift += 7)
+	int x{}, n = 0;
+	for (unsigned shift = 0; shift < 32; shift += 7)
 	{
 		if (n >= sizeof(VarLong))
 			return 0;
@@ -65,7 +66,10 @@ long long DecodeVarLong(int8_t* VarLong)
 
 		x |= (b & 0x7f) << shift;
 		if ((b & 0x80) == 0)
+		{
+			Size = n;
 			return x;
+		}
 	}
-	throw "VarLong is to big";
+	throw "VarInt is to big";
 }

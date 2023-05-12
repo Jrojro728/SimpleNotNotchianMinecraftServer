@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #define MAX_SIZEOF_PACKET 131071
 
@@ -10,18 +10,18 @@
 class Packet
 {
 public:
-	//ÄÚÁªº¯Êı
+	//å†…è”å‡½æ•°
 	Packet() { throw "unexpected param"; }
 	~Packet() {	}
 
-	//¹¹Ôìº¯Êı
-	Packet(char* DataBase);
+	//æ„é€ å‡½æ•°
+	Packet(char* DataBase, int& offset);
 
 	int8_t* GetData() { return Data; };
-	//»ñÈ¡°üÖĞµÄ±äÁ¿,¶¼ÒªÖ¸¶¨Î»ÖÃ(×Ö½Úµ¥Î»)
-	int GetVarInt(int Start, int End);
-	long long GetVarLong(int Start, int End);
-	std::string GetString(int Start, int End);
+	//è·å–åŒ…ä¸­çš„å˜é‡,éƒ½è¦æŒ‡å®šä½ç½®(å­—èŠ‚å•ä½),å’Œè·å–åˆ°çš„Varçš„å¤§å°
+	int GetVarInt(int Start, int& Size);
+	long long GetVarLong(int Start, int& Size);
+	std::string GetString(int Start, int &Size);
 
 private:
 	int Size;
