@@ -32,19 +32,22 @@ long long Packet::GetVarLong(int Start, int& Size)
 
 std::string Packet::GetString(int Start, int &Size)
 {
-	int8_t* VarInt = new int8_t[Size];
-	for (int i = 0; i < Size; i++)
+	int VarIntSize = 0;
+	int8_t* VarInt = new int8_t[4];
+	for (int i = 0; i < 4; i++)
 	{
 		VarInt[i] = Data[i + Start];
 	}
 
 	int offset = 0;
-	Size = DecodeVarInt(VarInt, offset);
-	char* temp = new char[Size];
-	for (int i = 0; i < Size; i++)
+	int StringSize = DecodeVarInt(VarInt, offset);
+	char* temp = new char[StringSize];
+	for (int i = 0; i < StringSize; i++)
 	{
 		temp[i] = Data[i + Start + offset];
 	}
-	
+
+	Size = StringSize + offset;
+
 	return std::string(temp, Size);
 }

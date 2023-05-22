@@ -22,9 +22,24 @@ public:
 	int GetVarInt(int Start, int& Size);
 	long long GetVarLong(int Start, int& Size);
 	std::string GetString(int Start, int &Size);
+	template<typename T>
+	T GetAnyType(int Start);
 
 private:
 	int Size;
 	int ID;
 	int8_t* Data;
 };
+
+template<typename T>
+T Packet::GetAnyType(int Start)
+{
+	int Size = sizeof(T);
+	int8_t* tTemp = new int8_t[Size];
+	for (int i = 0; i < Size; i++)
+	{
+		tTemp[i] = Data[Start + i];
+	}
+
+	return reinterpret_cast<T*>();
+}

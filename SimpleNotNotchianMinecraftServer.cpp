@@ -16,8 +16,11 @@ int main()
 	int offset = 0, temp = 0;
 	recv(ClientSocket, Data, MAX_SIZEOF_PACKET, 0);
 	Packet HandShake(Data, offset);
-	HandShake.GetVarInt(offset, offset);
-	HandShake.GetString(offset + 2, offset);
+	HandShake.GetVarInt(offset, temp);
+	offset += temp;
+	HandShake.GetString(offset, temp);
+	offset += temp;
+	unsigned short test = HandShake.GetAnyType<unsigned short>(offset);
 
 	return 0;
 }
