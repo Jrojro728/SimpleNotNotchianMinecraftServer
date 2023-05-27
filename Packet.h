@@ -40,6 +40,9 @@ T Packet::GetAnyType(int Start)
 	{
 		tTemp[i] = Data[Start + i];
 	}
+	EndianSwap(tTemp, Size);
 
-	return reinterpret_cast<T*>();
+	T Result = *(T*)tTemp;
+	delete[] tTemp;
+	return Result;
 }

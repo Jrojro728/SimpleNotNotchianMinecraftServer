@@ -73,3 +73,18 @@ long long DecodeVarLong(int8_t* VarLong, int& Size)
 	}
 	throw "VarInt is to big";
 }
+
+void EndianSwap(int8_t* pData, int length)
+{
+	int i, cnt, end, start;
+	cnt = length / 2;
+	start = 0;
+	end = 0 + length - 1;
+	int8_t tmp;
+	for (i = 0; i < cnt; i++)
+	{
+		tmp = pData[start + i];
+		pData[start + i] = pData[end - i];
+		pData[end - i] = tmp;
+	}
+}

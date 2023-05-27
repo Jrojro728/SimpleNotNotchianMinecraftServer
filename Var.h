@@ -26,3 +26,11 @@ int8_t* EncodeVarLong(long long OriginalNumber, int8_t* buf);
 /// <param name="VarLong">要解码的VarLong变量</param>
 /// <returns>解码后的数值</returns>
 long long DecodeVarLong(int8_t* VarLong, int &Size);
+
+/// <summary>
+/// 从网上复制的翻转字节序函数
+/// </summary>
+/// <param name="pData">数据</param>
+/// <param name="startIndex"></param>
+/// <param name="length"></param>
+void EndianSwap(int8_t* pData, int length);
