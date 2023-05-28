@@ -10,24 +10,14 @@ Packet::Packet(char* DataBase, int& offset)
 	Data = (int8_t*)DataBase;
 }
 
-int Packet::GetVarInt(int Start, int& Size)
-{
-	int8_t* temp = new int8_t[4];
-	for(int i = 0; i < 4; i++)
-	{
-		temp[i] = Data[Start + i];
-	}
-	return DecodeVarInt(temp, Size);
-}
-
-long long Packet::GetVarLong(int Start, int& Size)
+long long Packet::GetVarInt(int Start, int& Size)
 {
 	int8_t* temp = new int8_t[8];
 	for (int i = 0; i < 8; i++)
 	{
 		temp[i] = Data[Start + i];
 	}
-	return DecodeVarLong(temp, Size);
+	return DecodeVarInt(temp, Size);
 }
 
 std::string Packet::GetString(int Start, int &Size)

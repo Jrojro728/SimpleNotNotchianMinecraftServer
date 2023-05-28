@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #define MAX_SIZEOF_PACKET 131071
+#pragma warning(disable: 4244)
 
 #include <cstdint>
 #include <string>
@@ -19,11 +20,10 @@ public:
 
 	int8_t* GetData() { return Data; };
 	//获取包中的变量,都要指定位置(字节单位),和获取到的Var的大小
-	int GetVarInt(int Start, int& Size);
-	long long GetVarLong(int Start, int& Size);
-	std::string GetString(int Start, int &Size);
+	long long GetVarInt(int Start, int& Size);
+	std::string GetString(int Start, int& Size);
 	template<typename T>
-	T GetAnyType(int Start);
+	T GetAnyType(int Start, int& Size);
 
 private:
 	int Size;
@@ -32,9 +32,9 @@ private:
 };
 
 template<typename T>
-T Packet::GetAnyType(int Start)
+T Packet::GetAnyType(int Start, int& Size)
 {
-	int Size = sizeof(T);
+	Size = sizeof(T);
 	int8_t* tTemp = new int8_t[Size];
 	for (int i = 0; i < Size; i++)
 	{
