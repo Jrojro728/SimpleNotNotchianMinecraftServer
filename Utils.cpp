@@ -1,11 +1,13 @@
 ﻿#include "Utils.h"
 
+//1.16.1之前的版本获取信息的办法
+VersionInfo GetOlderVersion(int ProtocolID);
+
 VersionInfo GetVersion(int ProtocolID)
 {
+	GetOlderVersion(ProtocolID);
 	using namespace boost::network;
 	using namespace boost::network::http;
-
-	VersionInfo Result;
 
 	//解析网址
 	client Client;
@@ -14,33 +16,48 @@ VersionInfo GetVersion(int ProtocolID)
 	client::response Response = Client.get(Request);
 	std::string ResponseStr = body(Response);
 
-	//Json解析
-	Json::Reader Parser;
-	Json::Value Root;
-	if (Parser.parse(ResponseStr, Root))
+	if (ProtocolID <= 753)
 	{
-		for (int i = 0; i < INT32_MAX; i++)
-		{
-			char* String;
-			itoa(i, String, 10);
-			if (Root[String]["protocol_id"].asInt() == ProtocolID)
-			{
-				Result.ProtocolID = ProtocolID;
-				Result.VersionName = Root[String]["name"].asCString();
-				try
-				{
-					Result.PacketVer = Root[String]["packet"].asInt();
-					Result.PacketChange = 0;
-				}
-				catch (const std::exception&)
-				{
-					Result.PacketVer = 0;
-					Result.PacketChange = Root[String]["packet"];
-				}
-				return Result;
-			}
-		}
+
 	}
 
 	throw "Unknown ProtocolID";
+}
+
+VersionInfo GetOlderVersion(int ProtocolID)
+{
+	std::ifstream JsonFile("OldVersionJson.json");
+
+	JsonFile.seekg(0, std::ios::end);
+	int len = JsonFile.tellg();
+	JsonFile.seekg(0, std::ios::beg);
+	char* FileCStr= new char[len];
+	std::string OlderVersionJsonStr;
+	
+	JsonFile.read(FileCStr, len);
+	OlderVersionJsonStr = FileCStr;
+
+	//Json解析
+	Json::Reader Parser;
+	Json::Value Root;
+	if (Parser.parse(OlderVersionJsonStr, Root))
+	{
+		VersionInfo Result;
+		char TempStr[4]{ 0 };
+		_itoa_s(ProtocolID, TempStr, 10);
+		Result.VersionName = Root[TempStr]["name"].asCString();
+		try
+		{
+			Result.Type = Root[TempStr]["type"].asCString();
+			Result.PacketVer = Root[TempStr]["packet"].asInt();
+		}
+		catch (const std::exception&)
+		{
+			Json::Value::Members types = Root[TempStr].getMemberNames();            //得到子节点
+
+			
+		}
+
+		return VersionInfo();
+	}
 }

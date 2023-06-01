@@ -148,7 +148,15 @@
     <ClInclude Include="Var.h" />
     <ClInclude Include="WinSock2Usage.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="OldVersionJson.json" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>
