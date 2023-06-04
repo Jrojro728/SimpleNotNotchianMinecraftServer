@@ -7,34 +7,49 @@
 
 int offset = 0, temp = 0;
 char Data[MAX_SIZEOF_PACKET];
+SOCKET ClientSocket;
 
 #define AddTempToOffset() offset += temp
 
-void HandShake(char* Data);
+int HandShake(char* Data, std::string &VersionName, int &ProtocolNum);
+int Status(const std::string& VersionName, int& ProtocolNum);
 
 int main()
 {
-	SOCKET ClientSocket;
+	int Result = 0;
 	InitWinsock2(ClientSocket);
 	memset(Data, 0, sizeof(Data));
 	
 	recv(ClientSocket, Data, MAX_SIZEOF_PACKET, 0);
-	HandShake(Data);
+	std::string VersionName;
+	int ProtocolNum = 0; 
+	Result = HandShake(Data, VersionName, ProtocolNum);
+	if (Result == 1)
+		Status(VersionName, ProtocolNum);
 
 	return 0;
 }
 
-void HandShake(char* Data)
+int HandShake(char* Data, std::string& VersionName, int& ProtocolNum)
 {
 	Packet HandShake(Data, offset);
 
-	int ProtocolNum = HandShake.GetVarInt(offset, temp);
-	GetVersion(ProtocolNum);
-	/*AddTempToOffset();
+	ProtocolNum = HandShake.GetVarInt(offset, temp);
+	VersionName = GetVersion(ProtocolNum).VersionName;
+	AddTempToOffset();
 	std::string EntryServerIP = HandShake.GetString(offset, temp);
 	AddTempToOffset();
 	unsigned short Port = HandShake.GetAnyType<unsigned short>(offset, temp);
 	AddTempToOffset();
 	int NextState = HandShake.GetVarInt(offset, temp);
-	AddTempToOffset();*/
+	AddTempToOffset();
+
+	return NextState;
+}
+
+int Status(const std::string& VersionName, int& ProtocolNum)
+{
+	GetStatusJson(VersionName, ProtocolNum);
+
+	return 0;
 }

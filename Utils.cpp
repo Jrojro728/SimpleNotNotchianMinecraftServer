@@ -5,23 +5,38 @@ VersionInfo GetOlderVersion(int ProtocolID);
 
 VersionInfo GetVersion(int ProtocolID)
 {
-	GetOlderVersion(ProtocolID);
-	using namespace boost::network;
-	using namespace boost::network::http;
-
-	//解析网址
-	client Client;
-	client::request Request("https://gitlab.bixilon.de/bixilon/minosoft/-/raw/master/src/main/resources/assets/minosoft/mapping/versions.json");
-	Request << header("Connection", "close");
-	client::response Response = Client.get(Request);
-	std::string ResponseStr = body(Response);
-
 	if (ProtocolID <= 753)
 	{
-
+		return GetOlderVersion(ProtocolID);
 	}
 
-	throw "Unknown ProtocolID";
+	throw "newer than 1.16.3 is no support for now";
+}
+
+std::string GetStatusJson(std::string VersionName, int VersionID)
+{
+	Json::FastWriter FasterWriter;
+	Json::Value Root;
+	Json::Value Version;
+	Version["name"] = VersionName; //版本名
+	Version["protocol"] = VersionID; //协议号
+
+	Json::Value Jrojro; //我自己的信息
+	Json::Value Players;
+	Players["max"] = 2; //最多玩家
+	Players["online"] = 1; //在线玩家数
+	Jrojro["name"] = "jrojro";
+	Jrojro["id"] = "ef79a1fe-8ead-4fb2-ac06-ec328482ecfe";
+	Players["sample"].append(Jrojro);
+
+	Json::Value Description;
+	Description["text"] = "This is a SimpleNotNotchianMinecraftServer";
+	
+	Root["description"] = Description;
+	Root["players"] = Players;
+	Root["version"] = Version;
+
+	return FasterWriter.write(Root);
 }
 
 VersionInfo GetOlderVersion(int ProtocolID)
@@ -46,18 +61,18 @@ VersionInfo GetOlderVersion(int ProtocolID)
 		char TempStr[4]{ 0 };
 		_itoa_s(ProtocolID, TempStr, 10);
 		Result.VersionName = Root[TempStr]["name"].asCString();
-		try
-		{
+		try{
 			Result.Type = Root[TempStr]["type"].asCString();
+		}catch (const std::exception&){}
+
+		try {
 			Result.PacketVer = Root[TempStr]["packet"].asInt();
-		}
-		catch (const std::exception&)
-		{
-			Json::Value::Members types = Root[TempStr].getMemberNames();            //得到子节点
-
-			
+		}catch (const std::exception&){
+			Result.PacketChange = Root[TempStr]["packet"];
 		}
 
-		return VersionInfo();
+		return Result;
 	}
+
+	throw "Json Parser Error";
 }

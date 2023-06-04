@@ -9,7 +9,7 @@ struct VersionInfo
 	std::string VersionName;
 	std::string Type;
 	int PacketVer;
-	std::vector<std::string> PacketChange;
+	Json::Value PacketChange;
 };
 
 /// <summary>
@@ -18,3 +18,11 @@ struct VersionInfo
 /// <param name="VersionID">版本代码</param>
 /// <returns>版本信息</returns>
 VersionInfo GetVersion(int VersionID);
+
+/// <summary>
+/// 写Status Json Response
+/// </summary>
+/// <param name="VersionName"></param>
+/// <param name="VersionID"></param>
+/// <returns></returns>
+std::string GetStatusJson(std::string VersionName, int VersionID);
