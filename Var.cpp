@@ -2,18 +2,18 @@
 
 //实现来自 https://zhuanlan.zhihu.com/p/84250836
 
-int8_t* EncodeVarInt(long long OriginalNumber, int8_t* buf)
+int8_t* EncodeVarInt(long long OriginalNumber, int8_t* buf, int &Size)
 {
-	int n = 0;
+	Size = 0;
 
-	for (n = 0; OriginalNumber > 127; n++)
+	for (Size = 0; OriginalNumber > 127; Size++)
 	{
-		buf[n] = 0x80 | uint8_t(OriginalNumber & 0x7F);
+		buf[Size] = 0x80 | uint8_t(OriginalNumber & 0x7F);
 		OriginalNumber >>= 7;
 	}
 
-	buf[n] = uint8_t(OriginalNumber);
-	n++;
+	buf[Size] = uint8_t(OriginalNumber);
+	Size++;
 	return buf;
 }
 

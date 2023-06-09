@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <string>
 
-#include "Var.h"
+
 
 class Packet
 {
@@ -18,7 +18,9 @@ public:
 	//构造函数
 	Packet(char* DataBase, int& offset);
 
-	int8_t* GetData() { return Data; };
+	int GetSize() { return Size; };
+	int GetID() { return ID; };
+	char* GetData() { return (char*)Data; };
 	//获取包中的变量,都要指定位置(字节单位),和获取到的Var的大小
 	long long GetVarInt(int Start, int& Size);
 	std::string GetString(int Start, int& Size);

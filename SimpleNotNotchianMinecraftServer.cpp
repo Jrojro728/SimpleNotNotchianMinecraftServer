@@ -10,8 +10,9 @@ char Data[MAX_SIZEOF_PACKET];
 SOCKET ClientSocket;
 
 #define AddTempToOffset() offset += temp
+#define RecvData() recv(ClientSocket, Data, MAX_SIZEOF_PACKET, 0)
 
-int HandShake(char* Data, std::string &VersionName, int &ProtocolNum);
+int HandShake(std::string &VersionName, int &ProtocolNum);
 int Status(const std::string& VersionName, int& ProtocolNum);
 
 int main()
@@ -20,18 +21,27 @@ int main()
 	InitWinsock2(ClientSocket);
 	memset(Data, 0, sizeof(Data));
 	
-	recv(ClientSocket, Data, MAX_SIZEOF_PACKET, 0);
 	std::string VersionName;
 	int ProtocolNum = 0; 
-	Result = HandShake(Data, VersionName, ProtocolNum);
+	Result = HandShake(VersionName, ProtocolNum);
 	if (Result == 1)
 		Status(VersionName, ProtocolNum);
 
+	Result = shutdown(ClientSocket, SD_SEND);
+	if (Result == SOCKET_ERROR) {
+		printf("shutdown failed: %d\n", WSAGetLastError());
+		closesocket(ClientSocket);
+		WSACleanup();
+		return 1;
+	}
+	closesocket(ClientSocket);
+	WSACleanup();
 	return 0;
 }
 
-int HandShake(char* Data, std::string& VersionName, int& ProtocolNum)
+int HandShake(std::string& VersionName, int& ProtocolNum)
 {
+	RecvData();
 	Packet HandShake(Data, offset);
 
 	ProtocolNum = HandShake.GetVarInt(offset, temp);
@@ -49,7 +59,10 @@ int HandShake(char* Data, std::string& VersionName, int& ProtocolNum)
 
 int Status(const std::string& VersionName, int& ProtocolNum)
 {
-	GetStatusJson(VersionName, ProtocolNum);
+	RecvData();
+	Packet Status(Data, offset);
+
+	std::string StatusJson = GetStatusJson(VersionName, ProtocolNum);
 
 	return 0;
 }

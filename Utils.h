@@ -1,7 +1,5 @@
-﻿#include <json/json.h>
-#define BOOST_NETWORK_ENABLE_HTTPS
-#include <boost/network/protocol/http/client.hpp>
-
+﻿#pragma once
+#include <json/json.h>
 #include <fstream>
 
 struct VersionInfo
@@ -22,7 +20,7 @@ VersionInfo GetVersion(int VersionID);
 /// <summary>
 /// 写Status Json Response
 /// </summary>
-/// <param name="VersionName"></param>
-/// <param name="VersionID"></param>
+/// <param name="VersionName">版本名</param>
+/// <param name="VersionID">版本ID</param>
 /// <returns></returns>
 std::string GetStatusJson(std::string VersionName, int VersionID);

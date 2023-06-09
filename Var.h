@@ -6,7 +6,7 @@
 /// </summary>
 /// <param name="OriginalNumber">原数值</param>
 /// <returns>VarLong变量</returns>
-int8_t* EncodeVarInt(long long OriginalNumber, int8_t* buf);
+int8_t* EncodeVarInt(long long OriginalNumber, int8_t* buf, int &Size);
 /// <summary>
 /// 解码VarInt
 /// </summary>
