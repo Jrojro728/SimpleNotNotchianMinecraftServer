@@ -4,6 +4,7 @@
 #include "WinSock2Usage.h"
 #include "Packet.h"
 #include "Utils.h"
+#include "PacketBuilder.h"
 
 int offset = 0, temp = 0;
 char Data[MAX_SIZEOF_PACKET];
@@ -17,6 +18,10 @@ int Status(const std::string& VersionName, int& ProtocolNum);
 
 int main()
 {
+	PacketBuilder Test;
+	unsigned short mmmm = 25565;
+	Test.Add<unsigned short>(&mmmm);
+
 	int Result = 0;
 	InitWinsock2(ClientSocket);
 	memset(Data, 0, sizeof(Data));

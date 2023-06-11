@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <string>
 
-
+#include "Var.h"
 
 class Packet
 {
