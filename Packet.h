@@ -13,7 +13,6 @@ class Packet
 public:
 	//内联函数
 	Packet() { throw "unexpected param"; }
-	~Packet() {	}
 
 	//构造函数
 	Packet(char* DataBase, int& offset);

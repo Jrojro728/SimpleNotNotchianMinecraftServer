@@ -11,6 +11,8 @@ char Data[MAX_SIZEOF_PACKET];
 SOCKET ClientSocket;
 
 #define AddTempToOffset() offset += temp
+#define ResetOffset() offset = 0
+#define ResetData() memset(Data, 0, MAX_SIZEOF_PACKET)
 #define RecvData() recv(ClientSocket, Data, MAX_SIZEOF_PACKET, 0)
 
 int HandShake(std::string &VersionName, int &ProtocolNum);
@@ -18,13 +20,9 @@ int Status(const std::string& VersionName, int& ProtocolNum);
 
 int main()
 {
-	PacketBuilder Test;
-	unsigned short mmmm = 25565;
-	Test.Add<unsigned short>(&mmmm);
-
 	int Result = 0;
 	InitWinsock2(ClientSocket);
-	memset(Data, 0, sizeof(Data));
+	ResetData();
 	
 	std::string VersionName;
 	int ProtocolNum = 0; 
@@ -32,7 +30,8 @@ int main()
 	if (Result == 1)
 		Status(VersionName, ProtocolNum);
 
-	Result = shutdown(ClientSocket, SD_SEND);
+	//关闭socket
+	Result = shutdown(ClientSocket, SD_BOTH);
 	if (Result == SOCKET_ERROR) {
 		printf("shutdown failed: %d\n", WSAGetLastError());
 		closesocket(ClientSocket);
@@ -46,6 +45,7 @@ int main()
 
 int HandShake(std::string& VersionName, int& ProtocolNum)
 {
+	ResetOffset();
 	RecvData();
 	Packet HandShake(Data, offset);
 
@@ -59,15 +59,26 @@ int HandShake(std::string& VersionName, int& ProtocolNum)
 	int NextState = HandShake.GetVarInt(offset, temp);
 	AddTempToOffset();
 
+	ResetData();
 	return NextState;
 }
 
 int Status(const std::string& VersionName, int& ProtocolNum)
 {
-	RecvData();
-	Packet Status(Data, offset);
-
+	ResetOffset();
+	recv(ClientSocket, Data, 131071, 0);
+	
+	PacketBuilder PacketToSend;
 	std::string StatusJson = GetStatusJson(VersionName, ProtocolNum);
+	PacketToSend.Add(StatusJson);
+	PacketToSend.GetPacket(temp);
+	send(ClientSocket, (char*)PacketToSend.GetData(), MAX_SIZEOF_PACKET, 0);
 
+	ResetData();
+	RecvData();
+	long long RandomDataFromClient = 0;
+	send(ClientSocket, Data, MAX_SIZEOF_PACKET, 0);
+
+	ResetData();
 	return 0;
 }

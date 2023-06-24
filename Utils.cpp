@@ -44,7 +44,7 @@ VersionInfo GetOlderVersion(int ProtocolID)
 	std::ifstream JsonFile("OldVersionJson.json");
 
 	JsonFile.seekg(0, std::ios::end);
-	int len = JsonFile.tellg();
+	long long len = JsonFile.tellg();
 	JsonFile.seekg(0, std::ios::beg);
 	char* FileCStr= new char[len];
 	std::string OlderVersionJsonStr;

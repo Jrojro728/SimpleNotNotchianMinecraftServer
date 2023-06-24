@@ -31,7 +31,8 @@ std::string Packet::GetString(int Start, int &Size)
 
 	int offset = 0;
 	int StringSize = DecodeVarInt(VarInt, offset);
-	char* temp = new char[StringSize];
+	char* temp = new char[StringSize + 1];
+	memset(temp, 0, StringSize + 1);
 	for (int i = 0; i < StringSize; i++)
 	{
 		temp[i] = Data[i + Start + offset];
