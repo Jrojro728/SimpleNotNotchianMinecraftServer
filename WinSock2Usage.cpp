@@ -1,4 +1,5 @@
-﻿#include "WinSock2Usage.h"
+﻿//WinSock2Usage.cpp: Windows的网络api功能
+#include "WinSock2Usage.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 #define DEFAULT_PORT "25565"

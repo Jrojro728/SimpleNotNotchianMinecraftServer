@@ -1,4 +1,5 @@
-﻿#include "Var.h"
+﻿//Var.cpp: 协议变量相关的一些东西
+#include "Var.h"
 
 //实现来自 https://zhuanlan.zhihu.com/p/84250836
 

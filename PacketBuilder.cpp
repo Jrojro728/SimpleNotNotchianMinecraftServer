@@ -1,3 +1,4 @@
+//PacketBuilder.cpp: 数据包创建器,可能有些数据溢出
 #include "PacketBuilder.h"
 
 PacketBuilder::PacketBuilder(int ID)

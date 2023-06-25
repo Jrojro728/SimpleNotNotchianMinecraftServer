@@ -1,4 +1,4 @@
-﻿// SimpleNotNotchianMinecraftServer.cpp : main entry of program
+﻿// SimpleNotNotchianMinecraftServer.cpp : 程序的入口点和协议阶段的处理
 
 #include <iostream>
 #include "WinSock2Usage.h"
