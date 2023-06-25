@@ -28,7 +28,7 @@ int main()
 	int ProtocolNum = 0; 
 	Result = HandShake(VersionName, ProtocolNum);
 	if (Result == 1)
-		Status(VersionName, ProtocolNum);
+		Result = Status(VersionName, ProtocolNum);
 
 	//关闭socket
 	Result = shutdown(ClientSocket, SD_BOTH);
@@ -40,7 +40,7 @@ int main()
 	}
 	closesocket(ClientSocket);
 	WSACleanup();
-	return 0;
+	return Result;
 }
 
 int HandShake(std::string& VersionName, int& ProtocolNum)
@@ -66,13 +66,13 @@ int HandShake(std::string& VersionName, int& ProtocolNum)
 int Status(const std::string& VersionName, int& ProtocolNum)
 {
 	ResetOffset();
-	recv(ClientSocket, Data, 131071, 0);
+	RecvData();
 	
 	PacketBuilder PacketToSend;
 	std::string StatusJson = GetStatusJson(VersionName, ProtocolNum);
 	PacketToSend.Add(StatusJson);
 	PacketToSend.GetPacket(temp);
-	send(ClientSocket, (char*)PacketToSend.GetData(), MAX_SIZEOF_PACKET, 0);
+	send(ClientSocket, (char*)PacketToSend.GetData(), PacketToSend.GetSize(), 0);
 
 	ResetData();
 	RecvData();
