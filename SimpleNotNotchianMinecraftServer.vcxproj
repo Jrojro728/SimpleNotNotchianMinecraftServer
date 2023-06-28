@@ -136,6 +136,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Packet.cpp" />
     <ClCompile Include="PacketBuilder.cpp" />
     <ClCompile Include="SimpleNotNotchianMinecraftServer.cpp" />
@@ -145,6 +146,7 @@
     <ClCompile Include="WinSock2Usage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="PacketBuilder.h" />
     <ClInclude Include="Var.h" />

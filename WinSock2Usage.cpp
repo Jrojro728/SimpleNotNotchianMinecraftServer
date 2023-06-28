@@ -4,7 +4,7 @@
 #pragma comment(lib, "Ws2_32.lib")
 #define DEFAULT_PORT "25565"
 
-int InitWinsock2(SOCKET& ClientSocket)
+int InitWinsock2(SOCKET& ListenSocket)
 {
 	WSADATA WsaData;
 	int iResult;
@@ -12,7 +12,7 @@ int InitWinsock2(SOCKET& ClientSocket)
 	iResult = WSAStartup(MAKEWORD(2, 2), &WsaData);
 	if (iResult != 0) {
 		printf("运行时出现错误: %d\n", iResult);
-		exit(1);
+		return 1;
 	}
 
 	struct addrinfo* Result = NULL, * Ptr = NULL, Hints;
@@ -27,16 +27,15 @@ int InitWinsock2(SOCKET& ClientSocket)
 	if (iResult != 0) {
 		printf("运行时出现错误: %d\n", iResult);
 		WSACleanup();
-		exit(1);
+		return 1;
 	}
 
-	SOCKET ListenSocket = INVALID_SOCKET;
 	ListenSocket = socket(Result->ai_family, Result->ai_socktype, Result->ai_protocol);
 	if (ListenSocket == INVALID_SOCKET) {
 		printf("执行socket()时错误: %ld\n", WSAGetLastError());
 		freeaddrinfo(Result);
 		WSACleanup();
-		exit(1);
+		return 1;
 	}
 
 	iResult = bind(ListenSocket, Result->ai_addr, (int)Result->ai_addrlen);
@@ -45,7 +44,7 @@ int InitWinsock2(SOCKET& ClientSocket)
 		freeaddrinfo(Result);
 		closesocket(ListenSocket);
 		WSACleanup();
-		exit(1);
+		return 1;
 	}
 	freeaddrinfo(Result);
 
@@ -53,17 +52,22 @@ int InitWinsock2(SOCKET& ClientSocket)
 		printf("监听错误: %ld\n", WSAGetLastError());
 		closesocket(ListenSocket);
 		WSACleanup();
-		exit(1);
+		return 1;
 	}
 
+	return 0;
+}
+
+int AcceptConnect(SOCKET& ListenSocket, SOCKET& ClientSocket)
+{
 	ClientSocket = INVALID_SOCKET;
 	ClientSocket = accept(ListenSocket, NULL, NULL);
 	if (ClientSocket == INVALID_SOCKET) {
 		printf("接受连接错误: %d\n", WSAGetLastError());
 		closesocket(ListenSocket);
 		WSACleanup();
-		exit(1);
+		return 1;
 	}
-
+	
 	return 0;
 }

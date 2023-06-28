@@ -21,7 +21,14 @@ int Status(const std::string& VersionName, int& ProtocolNum);
 int main()
 {
 	int Result = 0;
-	InitWinsock2(ClientSocket);
+	SOCKET ListenSocket;
+
+	Result = InitWinsock2(ListenSocket);
+	if (Result != 0)
+		return Result;
+	Result = AcceptConnect(ListenSocket, ClientSocket);
+	if (Result != 0)
+		return Result;
 	ResetData();
 	
 	std::string VersionName;
