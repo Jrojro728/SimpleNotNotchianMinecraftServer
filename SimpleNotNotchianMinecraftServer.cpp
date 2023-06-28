@@ -1,27 +1,19 @@
-﻿// SimpleNotNotchianMinecraftServer.cpp : 程序的入口点和协议阶段的处理
+﻿// SimpleNotNotchianMinecraftServer.cpp: 程序的入口点和协议阶段的处理
 
 #include <iostream>
-#include "WinSock2Usage.h"
-#include "Packet.h"
-#include "Utils.h"
-#include "PacketBuilder.h"
-
-int offset = 0, temp = 0;
-char Data[MAX_SIZEOF_PACKET];
-SOCKET ClientSocket;
-
-#define AddTempToOffset() offset += temp
-#define ResetOffset() offset = 0
-#define ResetData() memset(Data, 0, MAX_SIZEOF_PACKET)
-#define RecvData() recv(ClientSocket, Data, MAX_SIZEOF_PACKET, 0)
-
-int HandShake(std::string &VersionName, int &ProtocolNum);
-int Status(const std::string& VersionName, int& ProtocolNum);
+#include "Game.h"
 
 int main()
 {
 	int Result = 0;
-	InitWinsock2(ClientSocket);
+	SOCKET ListenSocket;
+
+	Result = InitWinsock2(ListenSocket);
+	if (Result != 0)
+		return Result;
+	Result = AcceptConnect(ListenSocket, ClientSocket);
+	if (Result != 0)
+		return Result;
 	ResetData();
 	
 	std::string VersionName;
@@ -41,43 +33,4 @@ int main()
 	closesocket(ClientSocket);
 	WSACleanup();
 	return Result;
-}
-
-int HandShake(std::string& VersionName, int& ProtocolNum)
-{
-	ResetOffset();
-	RecvData();
-	Packet HandShake(Data, offset);
-
-	ProtocolNum = HandShake.GetVarInt(offset, temp);
-	VersionName = GetVersion(ProtocolNum).VersionName;
-	AddTempToOffset();
-	std::string EntryServerIP = HandShake.GetString(offset, temp);
-	AddTempToOffset();
-	unsigned short Port = HandShake.GetAnyType<unsigned short>(offset, temp);
-	AddTempToOffset();
-	int NextState = HandShake.GetVarInt(offset, temp);
-	AddTempToOffset();
-
-	ResetData();
-	return NextState;
-}
-
-int Status(const std::string& VersionName, int& ProtocolNum)
-{
-	ResetOffset();
-	RecvData();
-	
-	PacketBuilder PacketToSend;
-	std::string StatusJson = GetStatusJson(VersionName, ProtocolNum);
-	PacketToSend.Add(StatusJson);
-	PacketToSend.GetPacket(temp);
-	send(ClientSocket, (char*)PacketToSend.GetData(), PacketToSend.GetSize(), 0);
-
-	ResetData();
-	RecvData();
-	send(ClientSocket, Data, MAX_SIZEOF_PACKET, 0);
-
-	ResetData();
-	return 0;
 }
