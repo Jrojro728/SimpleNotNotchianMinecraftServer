@@ -5,10 +5,6 @@
 #include "Utils.h"
 #include "PacketBuilder.h"
 
-int offset = 0, temp = 0;
-char Data[MAX_SIZEOF_PACKET];
-SOCKET ClientSocket;
-
 #define AddTempToOffset() offset += temp
 #define ResetOffset() offset = 0
 #define ResetData() memset(Data, 0, MAX_SIZEOF_PACKET)

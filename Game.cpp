@@ -1,6 +1,11 @@
 //Game.cpp: 游戏内阶段处理
 #include "Game.h"
 
+int offset = 0;
+int temp = 0;
+char Data[MAX_SIZEOF_PACKET];
+SOCKET ClientSocket;
+
 int HandShake(std::string& VersionName, int& ProtocolNum)
 {
 	ResetOffset();
