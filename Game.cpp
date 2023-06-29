@@ -1,13 +1,34 @@
-//Game.cpp: ��Ϸ�ڽ׶δ���
+﻿//Game.cpp: 游戏内阶段处理
 #include "Game.h"
 
-int offset = 0;
-int temp = 0;
-char Data[MAX_SIZEOF_PACKET];
-SOCKET ClientSocket;
-
-int HandShake(std::string& VersionName, int& ProtocolNum)
+DWORD NormalProcess(LPVOID lpParam)
 {
+	int Result = 0;
+	SOCKET ClientSocket = (SOCKET)lpParam;
+
+	std::string VersionName;
+	int ProtocolNum = 0;
+	Result = HandShake(ClientSocket, VersionName, ProtocolNum);
+	if (Result == 1)
+		Result = Status(ClientSocket, VersionName, ProtocolNum);
+
+	//关闭socket
+	Result = shutdown(ClientSocket, SD_BOTH);
+	if (Result == SOCKET_ERROR) {
+		printf("shutdown failed: %d\n", WSAGetLastError());
+		closesocket(ClientSocket);
+		WSACleanup();
+		return 1;
+	}
+	closesocket(ClientSocket);
+	return Result;
+}
+
+int HandShake(SOCKET ClientSocket, std::string& VersionName, int& ProtocolNum)
+{
+	int offset = 0;
+	int temp = 0;
+	char Data[MAX_SIZEOF_PACKET];
 	ResetOffset();
 	RecvData();
 	Packet HandShake(Data, offset);
@@ -22,12 +43,14 @@ int HandShake(std::string& VersionName, int& ProtocolNum)
 	int NextState = HandShake.GetVarInt(offset, temp);
 	AddTempToOffset();
 
-	ResetData();
 	return NextState;
 }
 
-int Status(const std::string& VersionName, int& ProtocolNum)
+int Status(SOCKET ClientSocket, const std::string& VersionName, int& ProtocolNum)
 {
+	int offset = 0;
+	int temp = 0;
+	char Data[MAX_SIZEOF_PACKET];
 	ResetOffset();
 	RecvData();
 
@@ -41,6 +64,5 @@ int Status(const std::string& VersionName, int& ProtocolNum)
 	RecvData();
 	send(ClientSocket, Data, MAX_SIZEOF_PACKET, 0);
 
-	ResetData();
 	return 0;
 }
