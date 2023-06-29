@@ -3,6 +3,11 @@
 #include <iostream>
 #include "Game.h"
 
+extern int offset;
+extern int temp;
+extern char Data[MAX_SIZEOF_PACKET];
+extern SOCKET ClientSocket;
+
 int main()
 {
 	int Result = 0;
