@@ -69,8 +69,9 @@ SimpleNotNotchianMinecraftServer
 1. Clone这个项目
 
 ```sh
-git clone https://github.com/shaojintian/Best_README_template.git
+git clone https://github.com/Jrojro728/SimpleNotNotchianMinecraftServer.git
 ```
+2. 构建
 
 ### 文件目录说明
 
