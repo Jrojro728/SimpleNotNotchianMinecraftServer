@@ -58,7 +58,7 @@ int InitWinsock2(SOCKET& ListenSocket)
 	return 0;
 }
 
-int AcceptConnect(SOCKET& ListenSocket, SOCKET& ClientSocket)
+int AcceptConnect(SOCKET ListenSocket, SOCKET& ClientSocket)
 {
 	ClientSocket = INVALID_SOCKET;
 	ClientSocket = accept(ListenSocket, NULL, NULL);
