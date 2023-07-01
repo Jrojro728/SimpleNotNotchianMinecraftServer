@@ -1,4 +1,4 @@
-//Packet.cpp: Êı¾İ°ü´¦Àí
+ï»¿//Packet.cpp: æ•°æ®åŒ…å¤„ç†
 #include "Packet.h"
 
 Packet::Packet(char* DataBase, int& offset)
@@ -18,7 +18,10 @@ long long Packet::GetVarInt(int Start, int& Size)
 	{
 		temp[i] = Data[Start + i];
 	}
-	return DecodeVarInt(temp, Size);
+
+	int Result = DecodeVarInt(temp, Size);
+	delete[] temp;
+	return Result;
 }
 
 std::string Packet::GetString(int Start, int &Size)
@@ -32,6 +35,7 @@ std::string Packet::GetString(int Start, int &Size)
 
 	int offset = 0;
 	int StringSize = DecodeVarInt(VarInt, offset);
+	delete[] VarInt;
 	char* temp = new char[StringSize + 1];
 	memset(temp, 0, StringSize + 1);
 	for (int i = 0; i < StringSize; i++)
@@ -41,5 +45,6 @@ std::string Packet::GetString(int Start, int &Size)
 
 	Size = StringSize + offset;
 
+	delete[] temp;
 	return std::string(temp, Size);
 }

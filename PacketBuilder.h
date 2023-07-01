@@ -11,6 +11,8 @@ public:
 	PacketBuilder() : PacketBuilder(0) {};
 	PacketBuilder(int ID);
 
+	void Clear() { delete[] Data; };
+
 	//增加数据
 	template<typename T>
 	void Add(T* Data);
@@ -21,11 +23,11 @@ public:
 	Packet GetPacket(int& offset);
 	//获取Data
 	int8_t* GetData() { return Data; };
-	int GetSize() { return Size; };
+	size_t GetSize() { return Size; };
 
 private:
 	int8_t* Data;
-	int Size, RealSize;
+	size_t Size, RealSize;
 	int ID;
 };
 
@@ -43,6 +45,7 @@ inline void PacketBuilder::Add(T* Data){
 	SizeData = EncodeVarInt(RealSize, SizeData, SizeDataSize);
 	Size += SizeDataSize;
 	
+	delete[] this->Data;
 	this->Data = new int8_t[Size + 1];
 	memset(this->Data, 0, Size + 1);
 	for (size_t i = 0; i < SizeDataSize; i++)

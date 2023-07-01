@@ -28,8 +28,9 @@ int HandShake(SOCKET ClientSocket, std::string& VersionName, int& ProtocolNum)
 {
 	int offset = 0;
 	int temp = 0;
-	char Data[MAX_SIZEOF_PACKET];
+	char* Data = new char[MAX_SIZEOF_PACKET];
 	ResetOffset();
+	ResetData();
 	RecvData();
 	Packet HandShake(Data, offset);
 
@@ -43,6 +44,7 @@ int HandShake(SOCKET ClientSocket, std::string& VersionName, int& ProtocolNum)
 	int NextState = HandShake.GetVarInt(offset, temp);
 	AddTempToOffset();
 
+	delete[] Data;
 	return NextState;
 }
 
@@ -50,19 +52,22 @@ int Status(SOCKET ClientSocket, const std::string& VersionName, int& ProtocolNum
 {
 	int offset = 0;
 	int temp = 0;
-	char Data[MAX_SIZEOF_PACKET];
+	char* Data = new char[MAX_SIZEOF_PACKET];
 	ResetOffset();
+	ResetData();
 	RecvData();
 
 	PacketBuilder PacketToSend;
 	std::string StatusJson = GetStatusJson(VersionName, ProtocolNum);
 	PacketToSend.Add(StatusJson);
 	PacketToSend.GetPacket(temp);
-	send(ClientSocket, (char*)PacketToSend.GetData(), PacketToSend.GetSize(), 0);
+	send(ClientSocket, (char*)PacketToSend.GetData(), (int) PacketToSend.GetSize(), 0);
+	PacketToSend.Clear();
 
 	ResetData();
 	RecvData();
 	send(ClientSocket, Data, MAX_SIZEOF_PACKET, 0);
 
+	delete[] Data;
 	return 0;
 }

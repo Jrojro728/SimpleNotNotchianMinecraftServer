@@ -63,9 +63,6 @@ VersionInfo GetOlderVersion(int ProtocolID)
 		char TempStr[4]{ 0 };
 		_itoa_s(ProtocolID, TempStr, 10);
 		Result.VersionName = Root[TempStr]["name"].asCString();
-		try{
-			Result.Type = Root[TempStr]["type"].asCString();
-		}catch (const std::exception&){}
 
 		try {
 			Result.PacketVer = Root[TempStr]["packet"].asInt();
@@ -73,8 +70,10 @@ VersionInfo GetOlderVersion(int ProtocolID)
 			Result.PacketChange = Root[TempStr]["packet"];
 		}
 
+		delete[] FileCStr;
 		return Result;
 	}
 
+	delete[] FileCStr;
 	throw "Json Parser Error";
 }

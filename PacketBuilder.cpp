@@ -1,4 +1,4 @@
-//PacketBuilder.cpp: Êı¾İ°ü´´½¨Æ÷,¿ÉÄÜÓĞĞ©Êı¾İÒç³ö
+ï»¿//PacketBuilder.cpp: æ•°æ®åŒ…åˆ›å»ºå™¨,å¯èƒ½æœ‰äº›æ•°æ®æº¢å‡º
 #include "PacketBuilder.h"
 
 PacketBuilder::PacketBuilder(int ID)
@@ -19,15 +19,18 @@ PacketBuilder::PacketBuilder(int ID)
 	{
 		Data[i] = SizeData[i];
 	}
+	delete[] SizeData;
 	for (size_t i = 0; i < IDSize; i++)
 	{
 		Data[i + SizeDataSize] = IDData[i];
 	}
+	delete[] IDData;
 }
 
 void PacketBuilder::Add(long long Data)
 {
-	int VarIntSize = 0, TempSize = RealSize, SizeDataSize = 0;
+	int VarIntSize = 0, SizeDataSize = 0;
+	size_t TempSize = RealSize;
 	int8_t* VarInt = new int8_t[8], *Temp = this->Data + (Size - RealSize), *SizeData = new int8_t[4];
 	Size -= (Size - RealSize);
 	memset(VarInt, 0, 8);
@@ -38,6 +41,7 @@ void PacketBuilder::Add(long long Data)
 	SizeData = EncodeVarInt(RealSize, SizeData, SizeDataSize);
 	Size += SizeDataSize;
 
+	delete[] this->Data;
 	this->Data = new int8_t[Size + 1];
 	memset(this->Data, 0, Size + 1);
 
@@ -45,6 +49,7 @@ void PacketBuilder::Add(long long Data)
 	{
 		this->Data[i] = SizeData[i];
 	}
+	delete[] SizeData;
 	for (int i = 0; i < TempSize; i++)
 	{
 		this->Data[i + SizeDataSize] = Temp[i];
@@ -53,11 +58,13 @@ void PacketBuilder::Add(long long Data)
 	{
 		this->Data[i + SizeDataSize + TempSize] = VarInt[i];
 	}
+	delete[] VarInt;
 }
 
 void PacketBuilder::Add(std::string Data)
 {
-	int VarIntSize = 0, TempSize = RealSize, SizeDataSize = 0;
+	int VarIntSize = 0, SizeDataSize = 0;
+	size_t TempSize = RealSize;
 	int8_t* VarInt = new int8_t[8], * Temp = this->Data + (Size - RealSize), * SizeData = new int8_t[4];
 	Size -= (Size - RealSize);
 	memset(VarInt, 0, 8);
@@ -71,6 +78,7 @@ void PacketBuilder::Add(std::string Data)
 	SizeData = EncodeVarInt(RealSize, SizeData, SizeDataSize);
 	Size += SizeDataSize;
 
+	delete[] this->Data;
 	this->Data = new int8_t[Size + 1];
 	memset(this->Data, 0, Size + 1);
 
@@ -78,6 +86,7 @@ void PacketBuilder::Add(std::string Data)
 	{
 		this->Data[i] = SizeData[i];
 	}
+	delete[] SizeData;
 	for (int i = 0; i < TempSize; i++)
 	{
 		this->Data[i + SizeDataSize] = Temp[i];
@@ -86,6 +95,7 @@ void PacketBuilder::Add(std::string Data)
 	{
 		this->Data[i + SizeDataSize + TempSize] = VarInt[i];
 	}
+	delete[] VarInt;
 	for (int i = 0; i < Data.size(); i++)
 	{
 		this->Data[i + SizeDataSize + TempSize + VarIntSize] = StringData[i];

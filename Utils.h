@@ -5,7 +5,6 @@
 struct VersionInfo
 {
 	std::string VersionName;
-	std::string Type;
 	int PacketVer;
 	Json::Value PacketChange;
 };

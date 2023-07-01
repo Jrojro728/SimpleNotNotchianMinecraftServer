@@ -141,7 +141,6 @@
     <ClCompile Include="PacketBuilder.cpp" />
     <ClCompile Include="SimpleNotNotchianMinecraftServer.cpp" />
     <ClCompile Include="Utils.cpp" />
-    <ClCompile Include="Utils.h" />
     <ClCompile Include="Var.cpp" />
     <ClCompile Include="WinSock2Usage.cpp" />
   </ItemGroup>
@@ -149,6 +148,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="PacketBuilder.h" />
+    <ClInclude Include="Utils.h" />
     <ClInclude Include="Var.h" />
     <ClInclude Include="WinSock2Usage.h" />
   </ItemGroup>
