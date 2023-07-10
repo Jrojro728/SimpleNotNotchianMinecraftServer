@@ -1,12 +1,38 @@
 ﻿#pragma once
 #include <json/json.h>
 #include <fstream>
+#include <openssl/sha.h>
+#include <boost/asio.hpp>
 
 struct VersionInfo
 {
 	std::string VersionName;
 	int PacketVer;
 	Json::Value PacketChange;
+};
+
+// https://gist.github.com/madmongo1/53c303c6fe8de64f93adc014c7671d51
+// MC独特的hex摘要🤣
+struct daft_hash_impl
+{
+    daft_hash_impl()
+        : ctx_{}
+    {
+        SHA1_Init(&ctx_);
+    }
+
+    daft_hash_impl(daft_hash_impl const&) = delete;
+    daft_hash_impl(daft_hash_impl&&) = delete;
+    daft_hash_impl& operator=(daft_hash_impl const&) = delete;
+    daft_hash_impl& operator=(daft_hash_impl&&) = delete;
+    ~daft_hash_impl() {}
+
+    void update(boost::asio::const_buffer in) { SHA1_Update(&ctx_, in.data(), in.size()); }
+
+    std::string finalise();
+
+private:
+    SHA_CTX ctx_;
 };
 
 /// <summary>
