@@ -88,6 +88,8 @@ git clone https://github.com/Jrojro728/SimpleNotNotchianMinecraftServer.git
 ### 使用到的框架
 
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
+- [openssl](https://github.com/openssl/openssl)
+- [Boost.Asio](http://boost.org/libs/asio)
 
 ### 贡献者
 
