@@ -1,4 +1,6 @@
 ﻿#pragma once
+#pragma warning(disable : 4996)
+
 #include <json/json.h>
 #include <fstream>
 #include <openssl/sha.h>
