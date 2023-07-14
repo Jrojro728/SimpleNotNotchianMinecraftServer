@@ -62,12 +62,12 @@ jobs:
     - name: Create Release and Upload Release Asset
       uses: softprops/action-gh-release@v1
       with:
-          tag_name: $TAG_NAME
-          name: Release $RELEASE_NAME
+          tag_name: ${TAG_NAME}
+          name: Release ${RELEASE_NAME}
           body: auto weekly release
           draft: false
           prerelease: true
           files: |
-            SimpleNotNotchianMinecraftServer.exe
+            x64/Releases/SimpleNotNotchianMinecraftServer.exe
             OldVersionJson.json
             LICENSE 
