@@ -59,12 +59,12 @@ jobs:
         TAG_NAME: weekly-tag-${{ steps.date.outputs.date }}
         RELEASE_NAME: weekly-release-${{ steps.date.outputs.date }}
       with:
-          tag_name: $TAG_NAME
-          name: Release $RELEASE_NAME
+          tag_name: ${TAG_NAME}
+          name: Release ${RELEASE_NAME}
           body: auto weekly release
           draft: false
           prerelease: true
           files: |
-            x64/Releases/SimpleNotNotchianMinecraftServer.exe
+            x64/Release/SimpleNotNotchianMinecraftServer.exe
             OldVersionJson.json
             LICENSE 
