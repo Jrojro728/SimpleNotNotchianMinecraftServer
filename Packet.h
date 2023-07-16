@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#define MAX_SIZEOF_PACKET 131071
+#define MAX_SIZEOF_PACKET 2097151
 #pragma warning(disable: 4244)
 
 #include <cstdint>

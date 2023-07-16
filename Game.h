@@ -32,3 +32,10 @@ int HandShake(SOCKET ClientSocket, std::string& VersionName, int& ProtocolNum);
 /// <param name="ProtocolNum">版本编号</param>
 /// <returns>状态码</returns>
 int Status(SOCKET ClientSocket, const std::string& VersionName, int& ProtocolNum);
+
+/// <summary>
+/// 登录阶段
+/// </summary>
+/// <param name="ClientSocket">客户端套接字</param>
+/// <returns>状态码</returns>
+int Login(SOCKET ClientSocket);

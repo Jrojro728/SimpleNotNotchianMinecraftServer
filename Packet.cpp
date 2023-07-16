@@ -45,6 +45,7 @@ std::string Packet::GetString(int Start, int &Size)
 
 	Size = StringSize + offset;
 
+	std::string Result = std::string(temp, Size);
 	delete[] temp;
-	return std::string(temp, Size);
+	return Result;
 }

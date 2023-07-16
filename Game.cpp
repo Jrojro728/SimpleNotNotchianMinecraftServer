@@ -9,8 +9,13 @@ DWORD NormalProcess(LPVOID lpParam)
 	std::string VersionName;
 	int ProtocolNum = 0;
 	Result = HandShake(ClientSocket, VersionName, ProtocolNum);
+	//Nextstate 1为请求状态, 2为请求登录
 	if (Result == 1)
 		Result = Status(ClientSocket, VersionName, ProtocolNum);
+	else if (Result == 2)
+		Result = Login(ClientSocket);
+	else
+		throw "Unknown Nextstate";
 
 	//关闭socket
 	Result = shutdown(ClientSocket, SD_BOTH);
@@ -29,7 +34,6 @@ int HandShake(SOCKET ClientSocket, std::string& VersionName, int& ProtocolNum)
 	int offset = 0;
 	int temp = 0;
 	char* Data = new char[MAX_SIZEOF_PACKET];
-	ResetOffset();
 	ResetData();
 	RecvData();
 	Packet HandShake(Data, offset);
@@ -53,7 +57,6 @@ int Status(SOCKET ClientSocket, const std::string& VersionName, int& ProtocolNum
 	int offset = 0;
 	int temp = 0;
 	char* Data = new char[MAX_SIZEOF_PACKET];
-	ResetOffset();
 	ResetData();
 	RecvData();
 
@@ -67,6 +70,16 @@ int Status(SOCKET ClientSocket, const std::string& VersionName, int& ProtocolNum
 	ResetData();
 	RecvData();
 	send(ClientSocket, Data, MAX_SIZEOF_PACKET, 0);
+
+	delete[] Data;
+	return 0;
+}
+
+int Login(SOCKET ClientSocket)
+{
+	int offset = 0;
+	int temp = 0;
+	char* Data = new char[MAX_SIZEOF_PACKET];
 
 	delete[] Data;
 	return 0;
