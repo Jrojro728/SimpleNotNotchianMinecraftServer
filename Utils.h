@@ -29,7 +29,8 @@ struct daft_hash_impl
     daft_hash_impl& operator=(daft_hash_impl&&) = delete;
     ~daft_hash_impl() {}
 
-    void update(boost::asio::const_buffer in) { SHA1_Update(&ctx_, in.data(), in.size()); }
+    //我把boost::asio::const_buffer换成了自带的string,因为感觉有点脱裤子放屁。
+    void update(std::string in) { SHA1_Update(&ctx_, in.data(), in.size()); }
 
     std::string finalise();
 
