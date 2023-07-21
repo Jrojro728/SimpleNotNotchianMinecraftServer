@@ -45,7 +45,7 @@ DWORD CheckClientConnect(LPVOID ListenSocket)
 		Result = AcceptConnect((SOCKET)ListenSocket, ClientSocket);
 		if (Result != 0)
 			return Result;
-
+	
 		CreateThread(NULL, 0, NormalProcess, (LPVOID)ClientSocket, 0, NULL);
 	}
 }

@@ -1,9 +1,13 @@
 ﻿//Game.cpp: 游戏内阶段处理
 #include "Game.h"
 
+std::map<int, Player> OnlinePlayer;
+std::map<int, bool> EmptyPlayerSlot;
+int MaxPlayerIndex = 1;
+
 DWORD NormalProcess(LPVOID lpParam)
 {
-	int Result = 0;
+	int Result = 0, ThisThreadPlayer = 0;
 	SOCKET ClientSocket = (SOCKET)lpParam;
 
 	std::string VersionName;
@@ -13,9 +17,7 @@ DWORD NormalProcess(LPVOID lpParam)
 	if (Result == 1)
 		Result = Status(ClientSocket, VersionName, ProtocolNum);
 	else if (Result == 2)
-		Result = Login(ClientSocket);
-	else
-		throw "Unknown Nextstate";
+		Result = Login(ClientSocket, ThisThreadPlayer);
 
 	//关闭socket
 	Result = shutdown(ClientSocket, SD_BOTH);
@@ -26,6 +28,7 @@ DWORD NormalProcess(LPVOID lpParam)
 		return 1;
 	}
 	closesocket(ClientSocket);
+	EmptyPlayerSlot[ThisThreadPlayer] = true;
 	return Result;
 }
 
@@ -60,12 +63,11 @@ int Status(SOCKET ClientSocket, const std::string& VersionName, int& ProtocolNum
 	ResetData();
 	RecvData();
 
-	PacketBuilder PacketToSend;
+	PacketBuilder Response;
 	std::string StatusJson = GetStatusJson(VersionName, ProtocolNum);
-	PacketToSend.Add(StatusJson);
-	PacketToSend.GetPacket(temp);
-	send(ClientSocket, (char*)PacketToSend.GetData(), (int) PacketToSend.GetSize(), 0);
-	PacketToSend.Clear();
+	Response.Add(StatusJson);
+	send(ClientSocket, Response, Response.GetSize(), 0);
+	Response.Clear();
 
 	ResetData();
 	RecvData();
@@ -75,11 +77,49 @@ int Status(SOCKET ClientSocket, const std::string& VersionName, int& ProtocolNum
 	return 0;
 }
 
-int Login(SOCKET ClientSocket)
+int Login(SOCKET ClientSocket, int& PlayerNumber)
 {
 	int offset = 0;
 	int temp = 0;
 	char* Data = new char[MAX_SIZEOF_PACKET];
+	
+	RecvData();
+	Packet LoginStart = Packet(Data, offset);
+	Player player = Player(LoginStart.GetString(offset, temp));
+	//这里其实是个bug，但能用
+	bool IsStored = false;
+	for (int i = 0; i < MaxPlayerIndex; i++)
+	{
+		if (EmptyPlayerSlot[i] == true)
+		{
+			OnlinePlayer[i] = player;
+			EmptyPlayerSlot[i] = false;
+			IsStored = true;
+			break;
+		}
+	}
+	if (!IsStored)
+	{
+		OnlinePlayer[MaxPlayerIndex] = player;
+		MaxPlayerIndex++;
+	}
+
+	//TODO: 正版验证
+
+	PacketBuilder LoginSuccess(0x02);
+	LoginSuccess.Add(std::string("ef79a1fe-8ead-4fb2-ac06-ec328482ecfe"));//玩家UUID
+	LoginSuccess.Add(player.GetName());//玩家昵称
+	send(ClientSocket, LoginSuccess, MAX_SIZEOF_PACKET, 0);
+
+	PacketBuilder JoinGame(0x23);
+	JoinGame.Add(1);//实体ID
+	JoinGame.Add((uint8_t)1);//游戏模式
+	JoinGame.Add(0);//维度
+	JoinGame.Add((uint8_t)0);//难度
+	JoinGame.Add((uint8_t)2);//最多玩家
+	JoinGame.Add(std::string("default"));//地图模式
+	JoinGame.Add(false);//更少的调试信息
+	send(ClientSocket, JoinGame, MAX_SIZEOF_PACKET, 0);
 
 	delete[] Data;
 	return 0;

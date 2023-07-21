@@ -5,6 +5,47 @@
 #include "Utils.h"
 #include "PacketBuilder.h"
 
+//玩家结构
+struct Player
+{
+public:
+	Player(std::string name = "jrojro") : name(name) {};
+
+	void operator=(Player& player) {
+		for (int i = 0; i < 4; i++)
+		{
+			armor[i] = player.armor[i];
+		}
+		for (int x = 0; x < 9; x++)
+		{
+			for (int y = 0; y < 4; y++)
+			{
+				Inventory[x][y];
+			}
+		}
+		health = player.health;
+		hungry = player.hungry;
+		name = player.name;
+	};
+
+	void SetItem(short column, short row, int item) { Inventory[column][row] = item; };
+	void SetHealth(short Health) { health = Health; };
+	void SetHungry(short Hungry) { hungry = Hungry; };
+	void SetArmor(short number, int item) { armor[number] = item; };
+
+	std::string GetName() { return name; };
+	int GetInventory(short column, short row) { return Inventory[column][row]; };
+	short GetHealth() { return health; };
+	short GetHungry() { return hungry; };
+	int GetArmor(short number) { return armor[number]; };
+
+private:
+	std::string name;
+	int Inventory[9][4];
+	short health, hungry;
+	int armor[4];
+};
+
 //方便的预处理器函数
 #define AddTempToOffset() offset += temp
 #define ResetOffset() offset = 0
@@ -38,4 +79,4 @@ int Status(SOCKET ClientSocket, const std::string& VersionName, int& ProtocolNum
 /// </summary>
 /// <param name="ClientSocket">客户端套接字</param>
 /// <returns>状态码</returns>
-int Login(SOCKET ClientSocket);
+int Login(SOCKET ClientSocket, int& PlayerNumber);

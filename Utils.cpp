@@ -27,6 +27,7 @@ std::string GetStatusJson(std::string VersionName, int VersionID)
 	Version["name"] = VersionName; //版本名
 	Version["protocol"] = VersionID; //协议号
 
+	//TODO: 把所有在线玩家列出
 	Json::Value Jrojro; //我自己的信息
 	Json::Value Players;
 	Players["max"] = 2; //最多玩家

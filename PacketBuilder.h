@@ -13,6 +13,8 @@ public:
 
 	void Clear() { delete[] Data; };
 
+	operator char*() { return (char*)Data; };
+
 	//增加数据
 	template<typename T>
 	void Add(T* Data);
