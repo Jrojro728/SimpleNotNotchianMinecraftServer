@@ -85,7 +85,9 @@ int Login(SOCKET ClientSocket, int& PlayerNumber)
 	
 	RecvData();
 	Packet LoginStart = Packet(Data, offset);
-	Player player = Player(LoginStart.GetString(offset, temp));
+	std::string PlayerName = LoginStart.GetString(offset, temp);
+	xg::Guid PlayerUUID = xg::Guid(GetPlayerUUID(PlayerName));
+	Player player = Player(PlayerName, PlayerUUID);
 	//这里其实是个bug，但能用
 	bool IsStored = false;
 	for (int i = 0; i < MaxPlayerIndex; i++)
@@ -107,15 +109,15 @@ int Login(SOCKET ClientSocket, int& PlayerNumber)
 	//TODO: 正版验证
 
 	PacketBuilder LoginSuccess(0x02);
-	LoginSuccess.Add(std::string("ef79a1fe-8ead-4fb2-ac06-ec328482ecfe"));//玩家UUID
-	LoginSuccess.Add(player.GetName());//玩家昵称
+	LoginSuccess.Add(PlayerUUID);//玩家UUID
+	LoginSuccess.Add(PlayerName);//玩家昵称
 	send(ClientSocket, LoginSuccess, MAX_SIZEOF_PACKET, 0);
 
 	PacketBuilder JoinGame(0x23);
 	JoinGame.Add(1);//实体ID
-	JoinGame.Add((uint8_t)1);//游戏模式
-	JoinGame.Add(0);//维度
-	JoinGame.Add((uint8_t)0);//难度
+	JoinGame.Add(Creative);//游戏模式
+	JoinGame.Add(Overworld);//维度
+	JoinGame.Add(peaceful);//难度
 	JoinGame.Add((uint8_t)2);//最多玩家
 	JoinGame.Add(std::string("default"));//地图模式
 	JoinGame.Add(false);//更少的调试信息

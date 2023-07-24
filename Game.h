@@ -4,12 +4,38 @@
 #include "Packet.h"
 #include "Utils.h"
 #include "PacketBuilder.h"
+#include <crossguid/guid.hpp>
+
+//各种枚举
+enum Gamemode : uint8_t
+{
+	Survival = 0,
+	Creative = 1,
+	Adventure = 2,
+	Spectator = 3,
+	Hardcore = 0x8
+};
+
+enum Dimension : int
+{
+	Nether = -1,
+	Overworld = 0,
+	End = 1
+};
+
+enum Difficulty : uint8_t
+{
+	peaceful = 0,
+	easy = 1,
+	normal = 2,
+	hard = 3
+};
 
 //玩家结构
 struct Player
 {
 public:
-	Player(std::string name = "jrojro") : name(name) {};
+	Player(std::string name = "jrojro", xg::Guid uuid = xg::Guid("ef79a1fe-8ead-4fb2-ac06-ec328482ecfe")) : name(name), uuid(uuid) {};
 
 	void operator=(Player& player) {
 		for (int i = 0; i < 4; i++)
@@ -26,6 +52,7 @@ public:
 		health = player.health;
 		hungry = player.hungry;
 		name = player.name;
+		uuid = player.uuid;
 	};
 
 	void SetItem(short column, short row, int item) { Inventory[column][row] = item; };
@@ -33,17 +60,19 @@ public:
 	void SetHungry(short Hungry) { hungry = Hungry; };
 	void SetArmor(short number, int item) { armor[number] = item; };
 
-	std::string GetName() { return name; };
-	int GetInventory(short column, short row) { return Inventory[column][row]; };
-	short GetHealth() { return health; };
-	short GetHungry() { return hungry; };
-	int GetArmor(short number) { return armor[number]; };
+	std::string GetName() const { return name; };
+	int GetInventory(short column, short row) const { return Inventory[column][row]; };
+	short GetHealth() const { return health; };
+	short GetHungry() const { return hungry; };
+	int GetArmor(short number) const { return armor[number]; };
+	xg::Guid GetUUID() const { return uuid; };
 
 private:
 	std::string name;
 	int Inventory[9][4];
 	short health, hungry;
 	int armor[4];
+	xg::Guid uuid;
 };
 
 //方便的预处理器函数

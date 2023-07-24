@@ -4,7 +4,6 @@
 #include <json/json.h>
 #include <fstream>
 #include <openssl/sha.h>
-#include <boost/asio.hpp>
 
 struct VersionInfo
 {
@@ -52,3 +51,10 @@ VersionInfo GetVersion(int VersionID);
 /// <param name="VersionID">版本ID</param>
 /// <returns></returns>
 std::string GetStatusJson(std::string VersionName, int VersionID);
+
+/// <summary>
+/// 获取玩家的UUID
+/// </summary>
+/// <param name="PlayerName">玩家名</param>
+/// <returns>玩家UUID(不带连字符)</returns>
+std::string GetPlayerUUID(std::string PlayerName);
