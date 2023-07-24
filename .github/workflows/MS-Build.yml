@@ -34,7 +34,7 @@ jobs:
       run: git clone https://github.com/Microsoft/vcpkg --depth 1 && cd vcpkg && ./bootstrap-vcpkg.bat
       
     - name: Install library
-      run: vcpkg install jsoncpp:x64-windows && vcpkg install openssl:x64-windows && vcpkg install boost-asio:x64-windows && vcpkg integrate install
+      run: vcpkg install jsoncpp:x64-windows && vcpkg install openssl:x64-windows && vcpkg install boost-asio:x64-windows && vcpkg install curl:x64-windows && vcpkg integrate install
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
