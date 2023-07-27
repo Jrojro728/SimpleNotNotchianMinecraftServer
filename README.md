@@ -56,13 +56,14 @@ SimpleNotNotchianMinecraftServer
 
 为什么要这一段，明明已经够简单了(
 
-1. 使用vs2022构建此项目
-2. 无了
+1. 安装依赖
+2. 使用vs2022构建此项目
+3. 无了
 
 ###### 开发前的配置要求
 
 1. 安装 vcpkg 和 Visual Studio 2022
-2. 使用 vcpkg 安装 jsoncpp, openssl, boost-asio(都是64位版本)
+2. 使用 vcpkg 安装 jsoncpp, openssl, boost-asio, curl, crossguid(都是64位版本)
 
 ###### **安装步骤**
 
@@ -90,6 +91,8 @@ git clone https://github.com/Jrojro728/SimpleNotNotchianMinecraftServer.git
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
 - [openssl](https://github.com/openssl/openssl)
 - [Boost.Asio](http://boost.org/libs/asio)
+- [curl](https://curl.se/)
+- [crossguid](https://github.com/graeme-hill/crossguid)
 
 ### 贡献者
 
