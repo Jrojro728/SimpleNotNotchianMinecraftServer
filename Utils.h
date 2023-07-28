@@ -5,13 +5,6 @@
 #include <fstream>
 #include <openssl/sha.h>
 
-struct VersionInfo
-{
-	std::string VersionName;
-	int PacketVer;
-	Json::Value PacketChange;
-};
-
 // https://gist.github.com/madmongo1/53c303c6fe8de64f93adc014c7671d51
 // MC独特的hex摘要🤣
 struct daft_hash_impl
@@ -42,7 +35,7 @@ private:
 /// </summary>
 /// <param name="VersionID">版本代码</param>
 /// <returns>版本信息</returns>
-VersionInfo GetVersion(int VersionID);
+std::string GetVersion(int VersionID);
 
 /// <summary>
 /// 写Status Json Response

@@ -7,7 +7,7 @@
 #include <crossguid/guid.hpp>
 
 //各种枚举
-enum Gamemode : uint8_t
+enum Gamemode : int8_t
 {
 	Survival = 0,
 	Creative = 1,
@@ -23,7 +23,7 @@ enum Dimension : int
 	End = 1
 };
 
-enum Difficulty : uint8_t
+enum Difficulty : int8_t
 {
 	peaceful = 0,
 	easy = 1,
@@ -73,6 +73,35 @@ private:
 	short health, hungry;
 	int armor[4];
 	xg::Guid uuid;
+};
+
+//位置结构
+struct Location
+{
+public:
+	Location(int32_t X, int16_t Y, int32_t Z) { x = X; y = Y; z = Z; };
+
+	int32_t GetX() { return x; };
+	int16_t GetY() { return y; };
+	int32_t GetZ() { return z; };
+	uint64_t GetAll() { return ((static_cast<unsigned long long>(x & 0x3FFFFFF)) << 38) | ((static_cast<uint64_t>(y & 0xFFF)) << 26) | (z & 0x3FFFFFF); };
+
+	void SetX(int32_t X) { x = X; };
+	void SetY(int16_t Y) { y = Y; };
+	void SetZ(int32_t Z) { z = Z; };
+	void SetAll(uint64_t memory) {
+		x = memory >> 38;
+		y = (memory >> 26) & 0xFFF;
+		z = memory << 38 >> 38;
+
+		if (x >= 0x2000000) { x -= 0x4000000; }
+		if (y >= 0x800) { y -= 0x1000; }
+		if (z >= 0x2000000) { z -= 0x4000000; }
+	};
+
+private:
+	int32_t x, z;
+	int16_t y;
 };
 
 //方便的预处理器函数

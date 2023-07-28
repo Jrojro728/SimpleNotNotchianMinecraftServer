@@ -42,7 +42,7 @@ int HandShake(SOCKET ClientSocket, std::string& VersionName, int& ProtocolNum)
 	Packet HandShake(Data, offset);
 
 	ProtocolNum = HandShake.GetVarInt(offset, temp);
-	VersionName = GetVersion(ProtocolNum).VersionName;
+	VersionName = GetVersion(ProtocolNum);
 	AddTempToOffset();
 	std::string EntryServerIP = HandShake.GetString(offset, temp);
 	AddTempToOffset();
@@ -86,7 +86,15 @@ int Login(SOCKET ClientSocket, int& PlayerNumber)
 	RecvData();
 	Packet LoginStart = Packet(Data, offset);
 	std::string PlayerName = LoginStart.GetString(offset, temp);
-	xg::Guid PlayerUUID = xg::Guid(GetPlayerUUID(PlayerName));
+	xg::Guid PlayerUUID;
+	try
+	{
+		PlayerUUID = xg::Guid(GetPlayerUUID(PlayerName));
+	}
+	catch (const char* e)
+	{
+		return 1;
+	}
 	Player player = Player(PlayerName, PlayerUUID);
 	//这里其实是个bug，但能用
 	bool IsStored = false;
@@ -109,19 +117,37 @@ int Login(SOCKET ClientSocket, int& PlayerNumber)
 	//TODO: 正版验证
 
 	PacketBuilder LoginSuccess(0x02);
-	LoginSuccess.Add(PlayerUUID);//玩家UUID
+	LoginSuccess.Add(PlayerUUID.str());//玩家UUID
 	LoginSuccess.Add(PlayerName);//玩家昵称
 	send(ClientSocket, LoginSuccess, MAX_SIZEOF_PACKET, 0);
+	LoginSuccess.Clear();
 
 	PacketBuilder JoinGame(0x23);
-	JoinGame.Add(1);//实体ID
-	JoinGame.Add(Creative);//游戏模式
-	JoinGame.Add(Overworld);//维度
-	JoinGame.Add(peaceful);//难度
-	JoinGame.Add((uint8_t)2);//最多玩家
+	JoinGame.Add<int>(1);//实体ID
+	JoinGame.Add<int8_t>(Creative);//游戏模式
+	JoinGame.Add<int>(Overworld);//维度
+	JoinGame.Add<int8_t>(peaceful);//难度
+	JoinGame.Add<int8_t>((int8_t)2);//最多玩家
 	JoinGame.Add(std::string("default"));//地图模式
-	JoinGame.Add(false);//更少的调试信息
+	JoinGame.Add<bool>(false);//更少的调试信息
 	send(ClientSocket, JoinGame, MAX_SIZEOF_PACKET, 0);
+	JoinGame.Clear();
+
+	PacketBuilder SpawnPosition(0x46);
+	SpawnPosition.Add(Location(0, 0, 0).GetAll());
+	send(ClientSocket, SpawnPosition, MAX_SIZEOF_PACKET, 0);
+	SpawnPosition.Clear();
+
+	PacketBuilder PlayerAbilities(0x2C);
+	PlayerAbilities.Add((int8_t)0x04);
+	PlayerAbilities.Add((float)10);
+	PlayerAbilities.Add((float)10);
+	send(ClientSocket, PlayerAbilities, MAX_SIZEOF_PACKET, 0);
+	PlayerAbilities.Clear();
+
+	ResetData();
+	RecvData();
+	ResetOffset();
 
 	delete[] Data;
 	return 0;
