@@ -28,14 +28,14 @@ int HandShake(SOCKET ClientSocket, std::string& VersionName, int& ProtocolNum)
 {
 	int offset = 0;
 	int temp = 0;
-	char* Data = new char[MAX_SIZEOF_PACKET];
+	char* Data = new char[TWO_BYTE_PACKET];
 	ResetOffset();
-	ResetData();
-	RecvData();
+	ResetData(TWO_BYTE_PACKET);
+	RecvData(TWO_BYTE_PACKET);
 	Packet HandShake(Data, offset);
 
 	ProtocolNum = HandShake.GetVarInt(offset, temp);
-	VersionName = GetVersion(ProtocolNum).VersionName;
+	VersionName = GetVersion(ProtocolNum);
 	AddTempToOffset();
 	std::string EntryServerIP = HandShake.GetString(offset, temp);
 	AddTempToOffset();
@@ -50,12 +50,10 @@ int HandShake(SOCKET ClientSocket, std::string& VersionName, int& ProtocolNum)
 
 int Status(SOCKET ClientSocket, const std::string& VersionName, int& ProtocolNum)
 {
-	int offset = 0;
 	int temp = 0;
-	char* Data = new char[MAX_SIZEOF_PACKET];
-	ResetOffset();
-	ResetData();
-	RecvData();
+	char* Data = new char[TWO_BYTE_PACKET];
+	ResetData(TWO_BYTE_PACKET);
+	RecvData(TWO_BYTE_PACKET);
 
 	PacketBuilder PacketToSend;
 	std::string StatusJson = GetStatusJson(VersionName, ProtocolNum);
@@ -64,9 +62,9 @@ int Status(SOCKET ClientSocket, const std::string& VersionName, int& ProtocolNum
 	send(ClientSocket, (char*)PacketToSend.GetData(), (int) PacketToSend.GetSize(), 0);
 	PacketToSend.Clear();
 
-	ResetData();
-	RecvData();
-	send(ClientSocket, Data, MAX_SIZEOF_PACKET, 0);
+	ResetData(TWO_BYTE_PACKET);
+	RecvData(TWO_BYTE_PACKET);
+	send(ClientSocket, Data, TWO_BYTE_PACKET, 0);
 
 	delete[] Data;
 	return 0;

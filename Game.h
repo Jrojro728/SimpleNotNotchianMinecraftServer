@@ -8,8 +8,8 @@
 //方便的预处理器函数
 #define AddTempToOffset() offset += temp
 #define ResetOffset() offset = 0
-#define ResetData() memset(Data, 0, MAX_SIZEOF_PACKET)
-#define RecvData() recv(ClientSocket, Data, MAX_SIZEOF_PACKET, 0)
+#define ResetData(Size) memset(Data, 0, Size)
+#define RecvData(Size) recv(ClientSocket, Data, Size, 0)
 
 //游戏正常阶段处理
 DWORD NormalProcess(LPVOID lpParam);

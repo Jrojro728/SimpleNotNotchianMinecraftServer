@@ -1,6 +1,7 @@
 ﻿#pragma once
 
-#define MAX_SIZEOF_PACKET 131071
+#define THREE_BYTE_PACKET 2097151
+#define TWO_BYTE_PACKET 131071
 #pragma warning(disable: 4244)
 
 #include <cstdint>

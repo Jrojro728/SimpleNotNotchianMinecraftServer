@@ -3,9 +3,9 @@
 #include "Utils.h"
 
 //1.16.1之前的版本获取信息的办法
-VersionInfo GetOlderVersion(int ProtocolID);
+std::string GetOlderVersion(int ProtocolID);
 
-VersionInfo GetVersion(int ProtocolID)
+std::string GetVersion(int ProtocolID)
 {
 	if (ProtocolID <= 753)
 	{
@@ -41,7 +41,7 @@ std::string GetStatusJson(std::string VersionName, int VersionID)
 	return FasterWriter.write(Root);
 }
 
-VersionInfo GetOlderVersion(int ProtocolID)
+std::string GetOlderVersion(int ProtocolID)
 {
 	std::ifstream JsonFile("OldVersionJson.json");
 
@@ -59,19 +59,12 @@ VersionInfo GetOlderVersion(int ProtocolID)
 	Json::Value Root;
 	if (Parser.parse(OlderVersionJsonStr, Root))
 	{
-		VersionInfo Result;
 		char TempStr[4]{ 0 };
 		_itoa_s(ProtocolID, TempStr, 10);
-		Result.VersionName = Root[TempStr]["name"].asCString();
-
-		try {
-			Result.PacketVer = Root[TempStr]["packet"].asInt();
-		}catch (const std::exception&){
-			Result.PacketChange = Root[TempStr]["packet"];
-		}
+		std::string VersionName = Root[TempStr]["name"].asCString();
 
 		delete[] FileCStr;
-		return Result;
+		return VersionName;
 	}
 
 	delete[] FileCStr;
