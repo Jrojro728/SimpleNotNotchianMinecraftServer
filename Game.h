@@ -4,6 +4,7 @@
 #include "Packet.h"
 #include "Utils.h"
 #include "PacketBuilder.h"
+#include "Logger.h"
 
 //方便的预处理器函数
 #define AddTempToOffset() offset += temp

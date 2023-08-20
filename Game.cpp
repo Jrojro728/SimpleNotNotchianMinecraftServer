@@ -1,6 +1,8 @@
 ﻿//Game.cpp: 游戏内阶段处理
 #include "Game.h"
 
+binlog::Session s;
+
 DWORD NormalProcess(LPVOID lpParam)
 {
 	int Result = 0;
@@ -29,21 +31,34 @@ int HandShake(SOCKET ClientSocket, std::string& VersionName, int& ProtocolNum)
 	int offset = 0;
 	int temp = 0;
 	char* Data = new char[TWO_BYTE_PACKET];
+	
+	BINLOG_INFO_CONSUME("进入握手阶段");
 	ResetOffset();
 	ResetData(TWO_BYTE_PACKET);
 	RecvData(TWO_BYTE_PACKET);
+
+	if (Data[0] == 0)
+	{
+		BINLOG_CRITICAL_CONSUME("无效的数据: NULL");
+		return -1;
+	}
+
 	Packet HandShake(Data, offset);
 
 	ProtocolNum = HandShake.GetVarInt(offset, temp);
 	VersionName = GetVersion(ProtocolNum);
+	BINLOG_INFO_CONSUME("客户端游戏版本: {}", VersionName);
 	AddTempToOffset();
 	std::string EntryServerIP = HandShake.GetString(offset, temp);
+	BINLOG_INFO_CONSUME("客户端连接的IP: {}", EntryServerIP);
 	AddTempToOffset();
 	unsigned short Port = HandShake.GetAnyType<unsigned short>(offset, temp);
+	BINLOG_INFO_CONSUME("客户端使用的端口: {}", Port);
 	AddTempToOffset();
 	int NextState = HandShake.GetVarInt(offset, temp);
 	AddTempToOffset();
 
+	BINLOG_INFO_CONSUME("握手阶段完成");
 	delete[] Data;
 	return NextState;
 }
@@ -52,8 +67,15 @@ int Status(SOCKET ClientSocket, const std::string& VersionName, int& ProtocolNum
 {
 	int temp = 0;
 	char* Data = new char[TWO_BYTE_PACKET];
+	BINLOG_INFO_CONSUME("进入Status阶段");
 	ResetData(TWO_BYTE_PACKET);
 	RecvData(TWO_BYTE_PACKET);
+	
+	if (Data[0] == 0)
+	{
+		BINLOG_CRITICAL_CONSUME("无效的数据: NULL");
+		return -1;
+	}
 
 	PacketBuilder PacketToSend;
 	std::string StatusJson = GetStatusJson(VersionName, ProtocolNum);
@@ -66,6 +88,7 @@ int Status(SOCKET ClientSocket, const std::string& VersionName, int& ProtocolNum
 	RecvData(TWO_BYTE_PACKET);
 	send(ClientSocket, Data, TWO_BYTE_PACKET, 0);
 
+	BINLOG_INFO_CONSUME("Status阶段完成");
 	delete[] Data;
 	return 0;
 }
