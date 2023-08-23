@@ -62,7 +62,7 @@ SimpleNotNotchianMinecraftServer
 ###### 开发前的配置要求
 
 1. 安装 vcpkg 和 Visual Studio 2022
-2. 使用 vcpkg 安装 jsoncpp, binlog(64位版本)
+2. 使用 vcpkg 安装 jsoncpp, binlog, curl(64位版本)
 
 ###### **安装步骤**
 
@@ -90,6 +90,7 @@ git clone https://github.com/Jrojro728/SimpleNotNotchianMinecraftServer.git
 
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
 - [binlog](https://github.com/morganstanley/binlog)
+- [curl](https://github.com/curl/curl)
 
 ### 贡献者
 
