@@ -16,3 +16,9 @@ std::string GetVersion(int VersionID);
 /// <param name="VersionID">版本ID</param>
 /// <returns></returns>
 std::string GetStatusJson(std::string VersionName, int VersionID);
+
+/// <summary>
+/// 获取随机新UUID
+/// </summary>
+/// <returns>获取到的UUID</returns>
+std::string GetRandomUUID();
