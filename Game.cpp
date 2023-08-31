@@ -1,12 +1,13 @@
 ﻿//Game.cpp: 游戏内阶段处理
 #include "Game.h"
 #include <list>
+#include "DataEnum.h"
 
 binlog::Session session;
 binlog::SessionWriter worker(session);
 
 int BiggestPlayerNumber = 0;
-std::vector <std::pair<std::string, std::string>> PlayerList;
+std::vector<Player> PlayerList;
 
 DWORD NormalProcess(LPVOID lpParam)
 {
@@ -20,7 +21,10 @@ DWORD NormalProcess(LPVOID lpParam)
 	if (Result == 1)
 		Result = Status(ClientSocket, VersionName, ProtocolNum);
 	else if (Result == 2)
+	{
 		Result = Login(ClientSocket, ThreadPlayer);
+		Result = Play(ClientSocket, ThreadPlayer);
+	}
 	else
 		throw "Error nextstate";
 
@@ -90,7 +94,7 @@ int Status(SOCKET ClientSocket, const std::string& VersionName, int& ProtocolNum
 	std::string StatusJson = GetStatusJson(VersionName, ProtocolNum);
 	PacketToSend.Add(StatusJson);
 	PacketToSend.GetPacket(temp);
-	send(ClientSocket, (char*)PacketToSend.GetData(), (int) PacketToSend.GetSize(), 0);
+	send(ClientSocket, PacketToSend, PacketToSend, 0);
 	PacketToSend.Clear();
 
 	ResetData(TWO_BYTE_PACKET);
@@ -115,20 +119,51 @@ int Login(SOCKET ClientSocket, int &ThreadPlayer)
 	BINLOG_INFO_C_CONSUME(login, "玩家名: {}", PlayerName);
 	ResetOffset();
 
+	//TODO: 增加封禁系统
+	/*PacketBuilder Disconnect(0x00);
+	Disconnect.Add(std::string(StringToUTF8("{\"text\": \"你已被封禁\"}")));
+	send(ClientSocket, (char*)Disconnect.GetData(), TWO_BYTE_PACKET, 0);*/
+
 	std::string UUID = GetRandomUUID();
 	BINLOG_INFO_C_CONSUME(login, "玩家UUID: {}", UUID);
 	PacketBuilder LoginSuccess(0x02);
-	LoginSuccess.Add(PlayerName);
 	LoginSuccess.Add(UUID);
-	send(ClientSocket, (char*)LoginSuccess.GetData(), TWO_BYTE_PACKET, 0);
+	LoginSuccess.Add(PlayerName);
+	send(ClientSocket, LoginSuccess, LoginSuccess, 0);
 	LoginSuccess.Clear();
 
-	PlayerList.push_back(std::pair<std::string, std::string>(PlayerName, UUID));
-	BINLOG_INFO_C_CONSUME(login, "编号为{}的玩家数据: {}", BiggestPlayerNumber, PlayerList.at(BiggestPlayerNumber));
+	PlayerList.push_back(Player(PlayerName, UUID));
+	BINLOG_INFO_C_CONSUME(login, "编号为{}的玩家数据: [{}, {}]", BiggestPlayerNumber, PlayerList.at(BiggestPlayerNumber).Name, PlayerList.at(BiggestPlayerNumber).UUID);
 	ThreadPlayer = BiggestPlayerNumber;
 	BiggestPlayerNumber++;
 
 	BINLOG_INFO_C_CONSUME(login, "登录完成");
+	delete[] Data;
+	return 0;
+}
+
+int Play(SOCKET ClientSocket, int& ThreadPlayer)
+{
+	int offset = 0, temp = 0;
+	char* Data = new char[TWO_BYTE_PACKET];
+	BINLOG_INFO_C_CONSUME(play, "进入游玩阶段");
+	ResetData(TWO_BYTE_PACKET);
+
+	PacketBuilder JoinGame(0x23);
+	JoinGame.Add<int>(1); //EID
+	JoinGame.Add<uint8_t>(Creative); //模式
+	JoinGame.Add<int>(0); //维度
+	JoinGame.Add<uint8_t>(Normal); //难度
+	JoinGame.Add<uint8_t>((uint8_t)2); //最大玩家数
+	JoinGame.Add(std::string("default"));
+	JoinGame.Add<bool>(false);
+	send(ClientSocket, JoinGame, JoinGame, 0);
+
+	PacketBuilder ServerDifficulty(0x0D);
+	ServerDifficulty.Add<uint8_t>(Normal);
+	send(ClientSocket, ServerDifficulty, ServerDifficulty, 0);
+	
+	BINLOG_INFO_C_CONSUME(play, "玩家登出");
 	delete[] Data;
 	return 0;
 }

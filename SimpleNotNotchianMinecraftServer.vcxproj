@@ -127,6 +127,7 @@
       <ConformanceMode>true</ConformanceMode>
       <UndefinePreprocessorDefinitions>
       </UndefinePreprocessorDefinitions>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,6 +146,7 @@
     <ClCompile Include="WinSock2Usage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DataEnum.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Packet.h" />

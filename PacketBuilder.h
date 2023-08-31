@@ -11,12 +11,21 @@ public:
 	PacketBuilder() : PacketBuilder(0) {};
 	PacketBuilder(int ID);
 
+	operator char* ()
+	{
+		return (char*)GetData();
+	}
+
+	operator int()
+	{
+		return (int) GetSize();
+	}
+
 	void Clear() { delete[] Data; };
 
 	//增加数据
 	template<typename T>
-	void Add(T* Data);
-	void Add(long long Data);
+	void Add(T Data);
 	void Add(std::string Data);
 	
 	//获取制造的数据包
@@ -32,13 +41,13 @@ private:
 };
 
 template<typename T>
-inline void PacketBuilder::Add(T* Data){
+inline void PacketBuilder::Add(T Data){
 	int SizeDataSize, SizeofData = sizeof(T), TempSize = RealSize;
 	int8_t* SizeData = new int8_t[4], *Temp = (int8_t*)this->Data + (Size - RealSize);
 	char* CharData = new char[SizeofData];
 	Size -= (Size - RealSize);
 	
-	CharData = (char*)Data;
+	CharData = (char*)&Data;
 	Size += SizeofData, RealSize += SizeofData;
 
 	EndianSwap((int8_t *)CharData, SizeofData);

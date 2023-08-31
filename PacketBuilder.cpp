@@ -27,40 +27,6 @@ PacketBuilder::PacketBuilder(int ID)
 	delete[] IDData;
 }
 
-void PacketBuilder::Add(long long Data)
-{
-	int VarIntSize = 0, SizeDataSize = 0;
-	size_t TempSize = RealSize;
-	int8_t* VarInt = new int8_t[8], *Temp = this->Data + (Size - RealSize), *SizeData = new int8_t[4];
-	Size -= (Size - RealSize);
-	memset(VarInt, 0, 8);
-
-	VarInt = EncodeVarInt(Data, VarInt, VarIntSize);
-	Size += VarIntSize, RealSize += VarIntSize;
-
-	SizeData = EncodeVarInt(RealSize, SizeData, SizeDataSize);
-	Size += SizeDataSize;
-
-	delete[] this->Data;
-	this->Data = new int8_t[Size + 1];
-	memset(this->Data, 0, Size + 1);
-
-	for (int i = 0; i < SizeDataSize; i++)
-	{
-		this->Data[i] = SizeData[i];
-	}
-	delete[] SizeData;
-	for (int i = 0; i < TempSize; i++)
-	{
-		this->Data[i + SizeDataSize] = Temp[i];
-	}
-	for (int i = 0; i < VarIntSize; i++)
-	{
-		this->Data[i + SizeDataSize + TempSize] = VarInt[i];
-	}
-	delete[] VarInt;
-}
-
 void PacketBuilder::Add(std::string Data)
 {
 	int VarIntSize = 0, SizeDataSize = 0;
