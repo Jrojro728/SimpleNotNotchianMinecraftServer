@@ -1,4 +1,4 @@
-﻿// SimpleNotNotchianMinecraftServer.cpp: 程序的入口点和协议阶段的处理
+﻿// SimpleNotNotchianMinecraftServer.cpp: 程序的入口点和初始化处理
 #include <iostream>
 #include "Game.h"
 

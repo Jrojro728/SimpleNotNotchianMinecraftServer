@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <cstdint>
+#include <string>
 
 /// <summary>
 /// 编码VarInt
@@ -20,3 +21,16 @@ long long DecodeVarInt(int8_t* VarInt, int &Size);
 /// <param name="pData">数据</param>
 /// <param name="length">类型长度</param>
 void EndianSwap(int8_t* pData, int length);
+
+/// <summary>
+/// 获取随机新UUID
+/// </summary>
+/// <returns>获取到的UUID</returns>
+std::string GetRandomUUID();
+
+/// <summary>
+/// 将字符串转换成utf8格式
+/// </summary>
+/// <param name="gbkData">要转换的字符串</param>
+/// <returns>转换后的字符串</returns>
+std::string StringToUTF8(const std::string& gbkData);

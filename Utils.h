@@ -16,16 +16,3 @@ std::string GetVersion(int VersionID);
 /// <param name="VersionID">版本ID</param>
 /// <returns></returns>
 std::string GetStatusJson(std::string VersionName, int VersionID);
-
-/// <summary>
-/// 获取随机新UUID
-/// </summary>
-/// <returns>获取到的UUID</returns>
-std::string GetRandomUUID();
-
-/// <summary>
-/// 将字符串转换成utf8格式
-/// </summary>
-/// <param name="gbkData">要转换的字符串</param>
-/// <returns>转换后的字符串</returns>
-std::string StringToUTF8(const std::string& gbkData);
