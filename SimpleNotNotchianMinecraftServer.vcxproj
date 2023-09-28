@@ -151,11 +151,14 @@
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="PacketBuilder.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Var.h" />
     <ClInclude Include="WinSock2Usage.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="langs\en.json" />
+    <None Include="langs\zh-CN.json" />
     <None Include="OldVersionJson.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

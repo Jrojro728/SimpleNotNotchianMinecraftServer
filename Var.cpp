@@ -106,8 +106,8 @@ std::string GetRandomUUID()
 		curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
 
 		//设置超时时间
-		curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 6); // set transport and time out time  
-		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 6);
+		curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 30); // set transport and time out time  
+		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30);
 
 		// 开启请求  
 		res = curl_easy_perform(curl);
