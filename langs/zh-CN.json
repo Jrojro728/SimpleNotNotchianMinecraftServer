@@ -1,0 +1,23 @@
+﻿{
+	"init.winsock.error": "初始化Winsock2失败, 返回: {}",
+	"init.winsock.done": "初始化Winsock2成功",
+	"connect.player.tried": "第{}个玩家尝试连接",
+	"connect.player.failed": "玩家连接失败, 返回: {}",
+	"connect.player.done": "第{}个玩家连接成功",
+	"game.handshake.start": "进入握手阶段",
+	"game.handshake.starterror": "无效的数据: NULL",
+	"game.handshake.clientversion": "客户端游戏版本: {}",
+	"game.handshake.clientip": "客户端连接的IP: {}",
+	"game.handshake.clientport": "客户端使用的端口: {}",
+	"game.handshake.done": "握手完成",
+	"game.status.start": "进入Status阶段",
+	"game.status.starterror": "无效的数据: NULL",
+	"game.status.done": "Status阶段完成",
+	"game.login.start": "进入登录阶段",
+	"game.login.playername": "玩家名: {}",
+	"game.login.randomuuid": "获取到的玩家UUID: {}",
+	"game.login.wroteplayer": "编号为{}的玩家数据: [{}, {}]",
+	"game.login.done": "登录完成",
+	"game.play.start": "进入游玩阶段",
+	"game.play.logout": "玩家登出"
+}

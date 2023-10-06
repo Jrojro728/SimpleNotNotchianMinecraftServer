@@ -92,7 +92,7 @@ int Status(SOCKET ClientSocket, const std::string& VersionName, int& ProtocolNum
 
 	PacketBuilder PacketToSend;
 	std::string StatusJson = GetStatusJson(VersionName, ProtocolNum);
-	PacketToSend.Add(StatusJson);
+	PacketToSend.Add(StringToUTF8(StatusJson));
 	PacketToSend.GetPacket(temp);
 	send(ClientSocket, PacketToSend, PacketToSend, 0);
 	PacketToSend.Clear();
