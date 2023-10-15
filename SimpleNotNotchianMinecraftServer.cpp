@@ -1,6 +1,7 @@
 ﻿// SimpleNotNotchianMinecraftServer.cpp: 程序的入口点和初始化处理
 #include <iostream>
 #include "Game.h"
+#include "i18n.h"
 
 int main()
 {
@@ -13,7 +14,7 @@ int main()
 		BINLOG_CRITICAL_C_CONSUME(init, "初始化Winsock2失败, 返回: {}", Result);
 		return Result;
 	}
-
+																		
 	BINLOG_INFO_C_CONSUME(init, "初始化Winsock2成功");
 
 	while (true)

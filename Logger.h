@@ -1,9 +1,5 @@
 #pragma once
-
-#include <iostream>
-
-#include <binlog/binlog.hpp>
-#include <binlog/TextOutputStream.hpp>
+#include "pch.h"
 
 //ÎÄ×ÖÊä³ö
 binlog::TextOutputStream static out(std::cout, "[%d] [%C/%S] [%M]: %m\n", "%H:%M:%S.%N");

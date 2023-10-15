@@ -1,8 +1,5 @@
 ﻿#pragma once
-
-#include "Var.h"
 #include "Packet.h"
-#include <cstring>
 
 class PacketBuilder
 {

@@ -1,6 +1,5 @@
 ﻿#pragma once
-#include <cstdint>
-#include <string>
+#include "pch.h"
 
 /// <summary>
 /// 编码VarInt

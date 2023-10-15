@@ -1,6 +1,5 @@
 ﻿#pragma once
-#include <json/json.h>
-#include <fstream>
+#include "pch.h"
 
 /// <summary>
 /// 获取版本信息
