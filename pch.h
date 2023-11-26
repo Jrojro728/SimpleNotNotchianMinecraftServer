@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <stdio.h>
 #include <stdlib.h>
+#include <codecvt>
 
 //windows lib
 #include <windows.h>
@@ -22,3 +23,5 @@
 #include <binlog/binlog.hpp>
 #include <binlog/TextOutputStream.hpp>
 #include <json/json.h>
+#include <json/json.h>
+#include <curl\curl.h>

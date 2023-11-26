@@ -1,8 +1,5 @@
 ﻿//Var.cpp: 协议变量相关的一些东西
 #include "Var.h"
-#include <json/json.h>
-#include <curl\curl.h>
-#include <codecvt>
 
 //实现来自 https://zhuanlan.zhihu.com/p/84250836
 
