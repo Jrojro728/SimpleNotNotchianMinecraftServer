@@ -1,7 +1,6 @@
 ﻿// SimpleNotNotchianMinecraftServer.cpp: 程序的入口点和初始化处理
 #include <iostream>
 #include "Game.h"
-#include "i18n.h"
 
 int main()
 {

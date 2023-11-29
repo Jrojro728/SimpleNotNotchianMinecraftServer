@@ -143,7 +143,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="i18n.cpp" />
     <ClCompile Include="Packet.cpp" />
     <ClCompile Include="PacketBuilder.cpp" />
     <ClCompile Include="SimpleNotNotchianMinecraftServer.cpp" />
@@ -154,7 +153,6 @@
   <ItemGroup>
     <ClInclude Include="DataEnum.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="i18n.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="PacketBuilder.h" />
