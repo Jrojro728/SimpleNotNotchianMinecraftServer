@@ -48,21 +48,21 @@ void PacketBuilder::Add(std::string Data)
 	this->Data = new int8_t[Size + 1];
 	memset(this->Data, 0, Size + 1);
 
-	for (int i = 0; i < SizeDataSize; i++)
+	for (size_t i = 0; i < SizeDataSize; i++)
 	{
 		this->Data[i] = SizeData[i];
 	}
 	delete[] SizeData;
-	for (int i = 0; i < TempSize; i++)
+	for (size_t i = 0; i < TempSize; i++)
 	{
 		this->Data[i + SizeDataSize] = Temp[i];
 	}
-	for (int i = 0; i < VarIntSize; i++)
+	for (size_t i = 0; i < VarIntSize; i++)
 	{
 		this->Data[i + SizeDataSize + TempSize] = VarInt[i];
 	}
 	delete[] VarInt;
-	for (int i = 0; i < Data.size(); i++)
+	for (size_t i = 0; i < Data.size(); i++)
 	{
 		this->Data[i + SizeDataSize + TempSize + VarIntSize] = StringData[i];
 	}
