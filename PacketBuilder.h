@@ -39,7 +39,8 @@ private:
 
 template<typename T>
 inline void PacketBuilder::Add(T Data){
-	int SizeDataSize, SizeofData = sizeof(T), TempSize = RealSize;
+	int SizeDataSize, SizeofData = sizeof(T);
+	size_t TempSize = RealSize;
 	int8_t* SizeData = new int8_t[4], *Temp = (int8_t*)this->Data + (Size - RealSize);
 	char* CharData = new char[SizeofData];
 	Size -= (Size - RealSize);
