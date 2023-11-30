@@ -10,7 +10,7 @@ PacketBuilder::PacketBuilder(int ID)
 	IDData = EncodeVarInt(ID, IDData, IDSize);
 	SizeData = EncodeVarInt(IDSize, SizeData, SizeDataSize);
 
-	Size = IDSize + SizeDataSize;
+	Size = static_cast<size_t>(IDSize) + static_cast<size_t>(SizeDataSize);
 	RealSize = IDSize;
 
 	Data = new int8_t[Size + 1];
