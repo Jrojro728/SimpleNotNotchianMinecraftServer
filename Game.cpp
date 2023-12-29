@@ -1,4 +1,5 @@
 ﻿//Game.cpp: 游戏内阶段处理
+#include "pch.h"
 #include "Game.h"
 #include <list>
 #include "DataEnum.h"

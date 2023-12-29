@@ -1,4 +1,5 @@
 ﻿//WinSock2Usage.cpp: Windows的网络api功能
+#include "pch.h"
 #include "WinSock2Usage.h"
 
 #pragma comment(lib, "Ws2_32.lib")

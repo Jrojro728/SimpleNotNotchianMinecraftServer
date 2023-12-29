@@ -133,6 +133,7 @@
       <Optimization>Disabled</Optimization>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -162,8 +163,6 @@
     <ClInclude Include="WinSock2Usage.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="langs\en.json" />
-    <None Include="langs\zh_CN.json" />
     <None Include="OldVersionJson.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

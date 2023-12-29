@@ -1,4 +1,5 @@
 ﻿// SimpleNotNotchianMinecraftServer.cpp: 程序的入口点和初始化处理
+#include "pch.h"
 #include <iostream>
 #include "Game.h"
 

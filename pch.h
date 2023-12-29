@@ -4,15 +4,15 @@
 #endif
 
 //C++ std lib
-#include <string>
-#include <map>
-#include <vector>
-#include <iostream>
-#include <fstream>
+#include <codecvt>
 #include <cstdint>
+#include <fstream>
+#include <iostream>
+#include <map>
 #include <stdio.h>
 #include <stdlib.h>
-#include <codecvt>
+#include <string>
+#include <vector>
 
 //windows lib
 #include <windows.h>
@@ -22,6 +22,5 @@
 //external lib
 #include <binlog/binlog.hpp>
 #include <binlog/TextOutputStream.hpp>
-#include <json/json.h>
-#include <json/json.h>
 #include <curl\curl.h>
+#include <json/json.h>

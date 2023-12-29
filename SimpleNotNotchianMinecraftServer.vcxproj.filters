@@ -36,9 +36,6 @@
     <ClCompile Include="Utils.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="i18n.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WinSock2Usage.h">
@@ -65,9 +62,6 @@
     <ClInclude Include="DataEnum.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="i18n.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -76,9 +70,5 @@
     <None Include="OldVersionJson.json">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="langs\en.json">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="langs\zh_CN.json" />
   </ItemGroup>
 </Project>

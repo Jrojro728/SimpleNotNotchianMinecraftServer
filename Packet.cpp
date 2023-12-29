@@ -1,4 +1,5 @@
 ﻿//Packet.cpp: 数据包处理
+#include "pch.h"
 #include "Packet.h"
 
 Packet::Packet(char* DataBase, int& offset)

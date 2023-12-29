@@ -1,5 +1,5 @@
 ﻿//Utils.cpp: 一些不可分类的函数
-
+#include "pch.h"
 #include "Utils.h"
 
 //1.16.1之前的版本获取信息的办法
