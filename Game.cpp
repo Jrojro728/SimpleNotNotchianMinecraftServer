@@ -45,12 +45,12 @@ int HandShake(SOCKET ClientSocket, std::string& VersionName, int& ProtocolNum)
 {
 	int offset = 0;
 	int temp = 0;
-	char* Data = new char[TWO_BYTE_PACKET];
+	char* Data = new char[THREE_BYTE_PACKET];
 	
 	BINLOG_INFO_WC_CONSUME(worker, handshake, "进入握手阶段");
 	ResetOffset();
-	ResetData(TWO_BYTE_PACKET);
-	RecvData(TWO_BYTE_PACKET);
+	ResetData(THREE_BYTE_PACKET);
+	RecvData(THREE_BYTE_PACKET);
 
 	if (Data[0] == 0)
 	{
@@ -80,10 +80,10 @@ int HandShake(SOCKET ClientSocket, std::string& VersionName, int& ProtocolNum)
 int Status(SOCKET ClientSocket, const std::string& VersionName, int& ProtocolNum)
 {
 	int temp = 0;
-	char* Data = new char[TWO_BYTE_PACKET];
+	char* Data = new char[THREE_BYTE_PACKET];
 	BINLOG_INFO_C_CONSUME(status, "进入Status阶段");
-	ResetData(TWO_BYTE_PACKET);
-	RecvData(TWO_BYTE_PACKET);
+	ResetData(THREE_BYTE_PACKET);
+	RecvData(THREE_BYTE_PACKET);
 	
 	if (Data[0] == 0)
 	{
@@ -98,9 +98,9 @@ int Status(SOCKET ClientSocket, const std::string& VersionName, int& ProtocolNum
 	send(ClientSocket, PacketToSend, PacketToSend, 0);
 	PacketToSend.Clear();
 
-	ResetData(TWO_BYTE_PACKET);
-	RecvData(TWO_BYTE_PACKET);
-	send(ClientSocket, Data, TWO_BYTE_PACKET, 0);
+	ResetData(THREE_BYTE_PACKET);
+	RecvData(THREE_BYTE_PACKET);
+	send(ClientSocket, Data, THREE_BYTE_PACKET, 0);
 
 	BINLOG_INFO_C_CONSUME(status, "Status阶段完成");
 	delete[] Data;
@@ -110,10 +110,10 @@ int Status(SOCKET ClientSocket, const std::string& VersionName, int& ProtocolNum
 int Login(SOCKET ClientSocket, int &ThreadPlayer)
 {
 	int offset = 0, temp = 0;
-	char* Data = new char[TWO_BYTE_PACKET];
+	char* Data = new char[THREE_BYTE_PACKET];
 	BINLOG_INFO_C_CONSUME(login, "进入登录阶段");
-	ResetData(TWO_BYTE_PACKET);
-	RecvData(TWO_BYTE_PACKET);
+	ResetData(THREE_BYTE_PACKET);
+	RecvData(THREE_BYTE_PACKET);
 
 	Packet LoginStart(Data, offset);
 	std::string PlayerName = LoginStart.GetString(offset, temp);
@@ -123,8 +123,9 @@ int Login(SOCKET ClientSocket, int &ThreadPlayer)
 	//TODO: 增加封禁系统
 	/*PacketBuilder Disconnect(0x00);
 	Disconnect.Add(std::string(StringToUTF8("{\"text\": \"你已被封禁\"}")));
-	send(ClientSocket, (char*)Disconnect.GetData(), TWO_BYTE_PACKET, 0);*/
+	send(ClientSocket, (char*)Disconnect.GetData(), THREE_BYTE_PACKET, 0);*/
 
+	//TODO:正版验证
 	std::string UUID = GetRandomUUID();
 	BINLOG_INFO_C_CONSUME(login, "玩家UUID: {}", UUID);
 	PacketBuilder LoginSuccess(0x02);
@@ -146,9 +147,9 @@ int Login(SOCKET ClientSocket, int &ThreadPlayer)
 int Play(SOCKET ClientSocket, int& ThreadPlayer)
 {
 	int offset = 0, temp = 0;
-	char* Data = new char[TWO_BYTE_PACKET];
+	char* Data = new char[THREE_BYTE_PACKET];
 	BINLOG_INFO_C_CONSUME(play, "进入游玩阶段");
-	ResetData(TWO_BYTE_PACKET);
+	ResetData(THREE_BYTE_PACKET);
 
 	PacketBuilder JoinGame(0x23);
 	JoinGame.Add<int>(1); //EID

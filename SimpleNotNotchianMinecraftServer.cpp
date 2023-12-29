@@ -5,7 +5,7 @@
 
 int main()
 {
-	int Result = 0, CumulativePlayerConnect = 0;
+	int Result = 0;
 	SOCKET ListenSocket;
 
 	Result = InitWinsock2(ListenSocket);
@@ -21,14 +21,13 @@ int main()
 	{
 		SOCKET ClientSocket = INVALID_SOCKET;
 		Result = AcceptConnect(ListenSocket, ClientSocket);
-		CumulativePlayerConnect++;
-		BINLOG_INFO_C_CONSUME(connect, "第{}个玩家尝试连接", CumulativePlayerConnect);
+		BINLOG_INFO_C_CONSUME(connect, "玩家尝试连接");
 		if (Result != 0)
 		{
 			BINLOG_CRITICAL_C_CONSUME(connect, "玩家连接失败, 返回: {}", Result);
 			return Result;
 		}
-		BINLOG_INFO_C_CONSUME(connect, "第{}个玩家连接成功", CumulativePlayerConnect);
+		BINLOG_INFO_C_CONSUME(connect, "玩家连接成功");
 
 		CreateThread(NULL, 0, NormalProcess, (LPVOID)ClientSocket, 0, NULL);
 	}
