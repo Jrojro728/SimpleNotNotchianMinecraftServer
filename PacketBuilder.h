@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Packet.h"
+//2024-1-27: 重构
 
 class PacketBuilder
 {
@@ -8,14 +9,19 @@ public:
 	PacketBuilder() : PacketBuilder(0) {};
 	PacketBuilder(int ID);
 
-	operator char* ()
+	operator const char* ()
 	{
-		return (char*)GetData();
+		return (const char*)Data;
 	}
 
 	operator int()
 	{
-		return (int) GetSize();
+		return (int)Size;
+	}
+
+	operator size_t()
+	{
+		return Size;
 	}
 
 	void Clear() { delete[] Data; };
@@ -41,18 +47,21 @@ template<typename T>
 inline void PacketBuilder::Add(T Data){
 	int SizeDataSize, SizeofData = sizeof(T);
 	size_t TempSize = RealSize;
-	int8_t* SizeData = new int8_t[4], *Temp = (int8_t*)this->Data + (Size - RealSize);
+	int8_t* SizeData = new int8_t[4], *Temp = new int8_t[Size - RealSize];
 	char* CharData = new char[SizeofData];
+	strcpy((char*)Temp, (char*)this->Data + (Size - RealSize));
+	delete[] this->Data;
 	Size -= (Size - RealSize);
 	
+	//实际添加的数据
 	CharData = (char*)&Data;
 	Size += SizeofData, RealSize += SizeofData;
-
-	EndianSwap((int8_t *)CharData, SizeofData);
+	EndianSwap((int8_t*)CharData, SizeofData);//小段->大段
+	
+	//数据包长度
 	SizeData = EncodeVarInt(RealSize, SizeData, SizeDataSize);
 	Size += SizeDataSize;
-	
-	delete[] this->Data;
+
 	this->Data = new int8_t[Size + 1];
 	memset(this->Data, 0, Size + 1);
 	for (size_t i = 0; i < SizeDataSize; i++)

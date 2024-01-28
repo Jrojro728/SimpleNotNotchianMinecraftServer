@@ -6,19 +6,19 @@
 
 size_t req_reply(void* ptr, size_t size, size_t nmemb, void* stream);
 
-int8_t* EncodeVarInt(long long OriginalNumber, int8_t* buf, int &Size)
+int8_t* EncodeVarInt(long long OriginalNumber, int8_t* Buffer, int &Size)
 {
 	Size = 0;
 
 	for (Size = 0; OriginalNumber > 127; Size++)
 	{
-		buf[Size] = 0x80 | uint8_t(OriginalNumber & 0x7F);
+		Buffer[Size] = 0x80 | uint8_t(OriginalNumber & 0x7F);
 		OriginalNumber >>= 7;
 	}
 
-	buf[Size] = uint8_t(OriginalNumber);
+	Buffer[Size] = uint8_t(OriginalNumber);
 	Size++;
-	return buf;
+	return Buffer;
 }
 
 long long DecodeVarInt(int8_t* VarLong, int& Size)
@@ -59,18 +59,18 @@ void EndianSwap(int8_t* pData, int length)
 	}
 }
 
-std::string StringToUTF8(const std::string& gbkData)
+std::string String2UTF8(const std::string& gbkData)
 {
-	const char* GBK_LOCALE_NAME = "CHS";  //GBK在windows下的locale name(.936, CHS ), linux下的locale名可能是"zh_CN.GBK"
+	//const char* GBK_LOCALE_NAME = "CHS";  //GBK在windows下的locale name(.936, CHS ), linux下的locale名可能是"zh_CN.GBK"
 
-	std::wstring_convert<std::codecvt<wchar_t, char, mbstate_t>>
-		conv(new std::codecvt<wchar_t, char, mbstate_t>(GBK_LOCALE_NAME));
-	std::wstring wString = conv.from_bytes(gbkData);    // string => wstring
+	//std::wstring_convert<std::codecvt<wchar_t, char, mbstate_t>>
+	//	conv(new std::codecvt<wchar_t, char, mbstate_t>("CHS"));
+	//std::wstring wString = conv.from_bytes(gbkData);    // string => wstring
 
-	std::wstring_convert<std::codecvt_utf8<wchar_t>> convert;
-	std::string utf8str = convert.to_bytes(wString);     // wstring => utf-8
+	//std::wstring_convert<std::codecvt_utf8<wchar_t>> convert;
+	//std::string utf8str = convert.to_bytes(wString);     // wstring => utf-8
 
-	return utf8str;
+	return gbkData;
 }
 
 std::string GetRandomUUID()

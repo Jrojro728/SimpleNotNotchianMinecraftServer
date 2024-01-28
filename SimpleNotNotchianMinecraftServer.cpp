@@ -5,6 +5,8 @@
 
 int main()
 {
+	PacketBuilder test(0x21);
+
 	int Result = 0;
 	SOCKET ListenSocket;
 
